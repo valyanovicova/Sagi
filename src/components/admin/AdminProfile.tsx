@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BarChart2, ArrowLeftRight, LogOut, ChevronRight, Shield, Moon, Sun, Languages, Bell, HelpCircle } from 'lucide-react';
+import { BarChart2, ArrowLeftRight, LogOut, ChevronRight, Shield, Moon, Sun, Languages, Bell, HelpCircle, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router';
 import { useLanguage } from '../../context/LanguageContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -21,9 +21,15 @@ export function AdminProfile() {
     }
   };
 
-  // Mock: communities this admin manages
   const managedCommunities = [
-    { id: 1, name: 'AIFC', members: 570, businesses: 42 },
+    {
+      id: 1,
+      name: 'AIFC',
+      members: 570,
+      businesses: 42,
+      bio: 'The Astana International Financial Centre — a financial hub and special economic zone in Kazakhstan, open to foreign residents, investors, experts and expat families.',
+      url: 'https://aifc.kz',
+    },
   ];
 
   return (
@@ -55,57 +61,20 @@ export function AdminProfile() {
             </span>
           </div>
 
-          {/* Main: left info + right QR/code stack */}
-          <div className="flex gap-4 relative z-10">
-            {/* Left */}
-            <div className="flex-1 flex flex-col justify-between gap-2">
-              <div>
-                <p className="text-[9px] tracking-[0.15em] uppercase text-white/35 mb-0.5">{t('roleAdmin')}</p>
-                <p className="text-sm font-semibold tracking-wide">{user?.name || 'Admin'}</p>
-              </div>
-              <div className="flex gap-4">
-                {managedCommunities.map(c => (
-                  <div key={c.id}>
-                    <p className="text-[9px] tracking-widest uppercase text-white/35 mb-0.5">{t('communities')}</p>
-                    <p className="text-sm font-bold text-[#c4b5fd]">1</p>
-                  </div>
-                ))}
-                <div>
-                  <p className="text-[9px] tracking-widest uppercase text-white/35 mb-0.5">{t('members')}</p>
-                  <p className="text-sm font-bold text-[#c4b5fd]">570</p>
-                </div>
-              </div>
+          {/* Main info */}
+          <div className="relative z-10 flex flex-col gap-2">
+            <div>
+              <p className="text-[9px] tracking-[0.15em] uppercase text-white/35 mb-0.5">{t('roleAdmin')}</p>
+              <p className="text-sm font-semibold tracking-wide">{user?.name || 'Admin'}</p>
             </div>
-
-            {/* Right: QR + barcode */}
-            <div className="flex flex-col items-center gap-2">
-              {/* QR code */}
-              <div className="bg-white rounded-xl p-1.5 shadow-lg">
-                <svg viewBox="0 0 80 80" className="w-14 h-14">
-                  <rect width="80" height="80" fill="white"/>
-                  <rect x="4" y="4" width="20" height="20" fill="#2d1b69"/>
-                  <rect x="7" y="7" width="14" height="14" fill="white"/>
-                  <rect x="10" y="10" width="8" height="8" fill="#2d1b69"/>
-                  <rect x="56" y="4" width="20" height="20" fill="#2d1b69"/>
-                  <rect x="59" y="7" width="14" height="14" fill="white"/>
-                  <rect x="62" y="10" width="8" height="8" fill="#2d1b69"/>
-                  <rect x="4" y="56" width="20" height="20" fill="#2d1b69"/>
-                  <rect x="7" y="59" width="14" height="14" fill="white"/>
-                  <rect x="10" y="62" width="8" height="8" fill="#2d1b69"/>
-                  <rect x="28" y="4" width="4" height="4" fill="#2d1b69"/><rect x="36" y="4" width="4" height="4" fill="#2d1b69"/><rect x="44" y="4" width="4" height="4" fill="#2d1b69"/>
-                  <rect x="28" y="12" width="4" height="4" fill="#2d1b69"/><rect x="44" y="12" width="4" height="4" fill="#2d1b69"/>
-                  <rect x="36" y="20" width="4" height="4" fill="#2d1b69"/>
-                  <rect x="4" y="28" width="4" height="4" fill="#2d1b69"/><rect x="12" y="28" width="4" height="4" fill="#2d1b69"/><rect x="20" y="28" width="4" height="4" fill="#2d1b69"/>
-                  <rect x="28" y="28" width="4" height="4" fill="#2d1b69"/><rect x="36" y="28" width="4" height="4" fill="#2d1b69"/>
-                  <rect x="52" y="28" width="4" height="4" fill="#2d1b69"/><rect x="60" y="28" width="4" height="4" fill="#2d1b69"/><rect x="68" y="28" width="4" height="4" fill="#2d1b69"/>
-                  <rect x="4" y="36" width="4" height="4" fill="#2d1b69"/><rect x="20" y="36" width="4" height="4" fill="#2d1b69"/>
-                  <rect x="28" y="36" width="4" height="4" fill="#2d1b69"/><rect x="44" y="36" width="4" height="4" fill="#2d1b69"/><rect x="52" y="36" width="4" height="4" fill="#2d1b69"/><rect x="68" y="36" width="4" height="4" fill="#2d1b69"/>
-                  <rect x="4" y="44" width="4" height="4" fill="#2d1b69"/><rect x="12" y="44" width="4" height="4" fill="#2d1b69"/>
-                  <rect x="36" y="44" width="4" height="4" fill="#2d1b69"/><rect x="52" y="44" width="4" height="4" fill="#2d1b69"/><rect x="60" y="44" width="4" height="4" fill="#2d1b69"/>
-                  <rect x="28" y="52" width="4" height="4" fill="#2d1b69"/><rect x="36" y="52" width="4" height="4" fill="#2d1b69"/><rect x="44" y="52" width="4" height="4" fill="#2d1b69"/><rect x="68" y="52" width="4" height="4" fill="#2d1b69"/>
-                  <rect x="28" y="60" width="4" height="4" fill="#2d1b69"/><rect x="52" y="60" width="4" height="4" fill="#2d1b69"/><rect x="60" y="60" width="4" height="4" fill="#2d1b69"/>
-                  <rect x="28" y="68" width="4" height="4" fill="#2d1b69"/><rect x="36" y="68" width="4" height="4" fill="#2d1b69"/><rect x="44" y="68" width="4" height="4" fill="#2d1b69"/><rect x="52" y="68" width="4" height="4" fill="#2d1b69"/><rect x="68" y="68" width="4" height="4" fill="#2d1b69"/>
-                </svg>
+            <div className="flex gap-4">
+              <div>
+                <p className="text-[9px] tracking-widest uppercase text-white/35 mb-0.5">{t('communities')}</p>
+                <p className="text-sm font-bold text-[#c4b5fd]">1</p>
+              </div>
+              <div>
+                <p className="text-[9px] tracking-widest uppercase text-white/35 mb-0.5">{t('members')}</p>
+                <p className="text-sm font-bold text-[#c4b5fd]">570</p>
               </div>
             </div>
           </div>
@@ -133,17 +102,33 @@ export function AdminProfile() {
             {managedCommunities.map((c, i) => (
               <div key={c.id}>
                 {i > 0 && <div className="border-t border-border" />}
-                <div className="flex items-center gap-3 p-4">
-                  <div className="w-9 h-9 rounded-xl bg-[#10b981]/10 flex items-center justify-center">
-                    <Shield className="w-5 h-5 text-[#10b981]" />
+                <div className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-9 h-9 rounded-xl bg-[#10b981]/10 flex items-center justify-center shrink-0">
+                      <Shield className="w-5 h-5 text-[#10b981]" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium">{c.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {c.members} {t('members')} · {c.businesses} {t('businesses')}
+                      </p>
+                    </div>
+                    <span className="text-xs px-2 py-1 bg-[#10b981]/10 text-[#10b981] rounded-full shrink-0">{t('filterActive')}</span>
                   </div>
-                  <div className="flex-1">
-                    <p className="font-medium">{c.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {c.members} {t('members')} · {c.businesses} {t('businesses')}
-                    </p>
-                  </div>
-                  <span className="text-xs px-2 py-1 bg-[#10b981]/10 text-[#10b981] rounded-full">{t('filterActive')}</span>
+                  {c.bio && (
+                    <p className="text-xs text-muted-foreground leading-relaxed mb-2 pl-12">{c.bio}</p>
+                  )}
+                  {c.url && (
+                    <a
+                      href={c.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs text-[#10b981] hover:text-[#059669] transition-colors pl-12"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      {c.url.replace(/^https?:\/\//, '')}
+                    </a>
+                  )}
                 </div>
               </div>
             ))}

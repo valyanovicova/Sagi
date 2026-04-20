@@ -1,18 +1,32 @@
-import { ChevronLeft, HelpCircle, QrCode, Check, Loader2 } from 'lucide-react';
+import { ChevronLeft, HelpCircle, QrCode, Check, Loader2, Search, X } from 'lucide-react';
 import { Link } from 'react-router';
 import { useLanguage } from '../context/LanguageContext';
 import { BusinessLogo } from './BusinessLogo';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 export function JoinCommunity() {
   const { t } = useLanguage();
   const [accessCode, setAccessCode] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
   const [joinedCommunities, setJoinedCommunities] = useState<number[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const suggestedCommunities = [
-    { id: 1, name: t('aifcName'), type: 'office' as const, members: 570, description: t('aifcDescription') },
+  const allCommunities = [
+    { id: 1, name: t('aifcName'), communityId: 'AIFC-001', type: 'office' as const, members: 570, description: t('aifcDescription') },
+    { id: 2, name: 'Tech Hub KZ', communityId: 'TECH-002', type: 'office' as const, members: 320, description: 'A community for tech professionals in Kazakhstan.' },
+    { id: 3, name: 'Startup Connect', communityId: 'STRT-003', type: 'office' as const, members: 145, description: 'Connecting startup founders and entrepreneurs.' },
   ];
+
+  const suggestedCommunities = allCommunities.slice(0, 1);
+
+  const searchResults = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return [];
+    return allCommunities.filter(
+      (c) => c.name.toLowerCase().includes(q) || c.communityId.toLowerCase().includes(q)
+    );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery, t]);
 
   const handleVerifyCode = () => {
     if (!accessCode.trim()) return;
@@ -84,6 +98,85 @@ export function JoinCommunity() {
               )}
             </button>
           </div>
+        </div>
+
+        <div className="mb-8">
+          <label className="block text-sm text-muted-foreground mb-2">{t('searchCommunity')}</label>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={t('searchCommunityPlaceholder')}
+              className="w-full pl-10 pr-10 py-3 bg-input-background border border-border rounded-xl focus:border-[#10b981] focus:outline-none transition-colors"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          {searchQuery.trim() && (
+            <div className="mt-3 space-y-3">
+              <p className="text-sm text-muted-foreground">{t('searchResults')}</p>
+              {searchResults.length === 0 ? (
+                <p className="text-sm text-muted-foreground text-center py-4">{t('noSearchResults')}</p>
+              ) : (
+                searchResults.map((community) => {
+                  const isJoined = joinedCommunities.includes(community.id);
+                  return (
+                    <div
+                      key={community.id}
+                      className="bg-card border border-border rounded-2xl p-4 hover:border-[#10b981]/50 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        {community.id === 1 ? (
+                          <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center flex-shrink-0 p-1.5 shadow-sm border border-border">
+                            <svg viewBox="0 0 64 64" className="w-full h-full">
+                              <path d="M32 6 A26 26 0 1 0 32 58 A26 26 0 0 0 56 38" fill="none" stroke="#008080" strokeWidth="7" strokeLinecap="round" />
+                              <path d="M32 16 A16 16 0 1 0 32 48 A16 16 0 0 0 46 40" fill="none" stroke="#008080" strokeWidth="5" strokeLinecap="round" />
+                              <circle cx="32" cy="32" r="4.5" fill="#111" />
+                            </svg>
+                          </div>
+                        ) : (
+                          <BusinessLogo name={community.name} type={community.type} size="md" />
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="mb-0.5">{community.name}</h3>
+                          <p className="text-xs text-[#10b981] mb-0.5">{community.communityId}</p>
+                          <p className="text-xs text-muted-foreground mb-1">{community.members} {t('members')}</p>
+                          <p className="text-xs text-muted-foreground line-clamp-2">{community.description}</p>
+                        </div>
+                        <button
+                          onClick={() => handleJoinCommunity(community.id)}
+                          disabled={isJoined}
+                          className={`px-4 py-2 rounded-lg transition-all flex-shrink-0 ${
+                            isJoined
+                              ? 'bg-[#10b981]/10 text-[#10b981] cursor-default'
+                              : 'bg-[#10b981] text-white hover:bg-[#059669]'
+                          }`}
+                        >
+                          {isJoined ? (
+                            <div className="flex items-center gap-1">
+                              <Check className="w-4 h-4" />
+                              <span className="text-sm">{t('applicationSubmitted')}</span>
+                            </div>
+                          ) : (
+                            <span className="text-sm">{t('submitApplication')}</span>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          )}
         </div>
 
         <div>

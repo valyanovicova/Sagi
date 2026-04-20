@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronLeft, ShoppingBag, Calendar, CheckSquare, Briefcase, Newspaper, Plus, MoreHorizontal, Pencil, Trash2, ToggleLeft, ToggleRight, X, Check } from 'lucide-react';
+import { ChevronLeft, ShoppingBag, Calendar, Briefcase, Newspaper, Plus, MoreHorizontal, Pencil, Trash2, ToggleLeft, ToggleRight, X, Check } from 'lucide-react';
 import { Link } from 'react-router';
 import { BusinessLogo } from '../BusinessLogo';
 import { useLanguage } from '../../context/LanguageContext';

@@ -1,8 +1,17 @@
-import { useState } from 'react';
-import { ChevronLeft, Search, UtensilsCrossed, GraduationCap, Sparkles, ShoppingBag, Building2, Dumbbell, HeartPulse, Plane, Calendar, CheckSquare, Briefcase, Newspaper } from 'lucide-react';
-import { Link } from 'react-router';
+import { useState, useRef } from 'react';
+import { ChevronLeft, Search, UtensilsCrossed, GraduationCap, Sparkles, ShoppingBag, Building2, Dumbbell, HeartPulse, Plane, Calendar, CheckSquare, Briefcase, Newspaper, Camera } from 'lucide-react';
+import { Link, useLocation } from 'react-router';
 import { useLanguage } from '../context/LanguageContext';
 import { BusinessLogo } from './BusinessLogo';
+
+interface NewsPost {
+  id: number;
+  author: string;
+  time: string;
+  text: string;
+  image: string;
+  attendees: { name: string; initials: string; color: string }[];
+}
 
 type BizType = 'restaurant' | 'cafe' | 'education' | 'spa' | 'retail' | 'hotel' | 'fitness' | 'healthcare' | 'travel';
 type Tab = 'offers' | 'events' | 'tasks' | 'vacancies' | 'news';
@@ -18,11 +27,15 @@ interface Offer {
 
 export function CategoryOffers() {
   const { t } = useLanguage();
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
   const [tab, setTab] = useState<Tab>('offers');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [filterValue, setFilterValue] = useState('all');
   const [rsvped, setRsvped] = useState<Set<number>>(new Set());
   const [taskDone, setTaskDone] = useState<Set<number>>(new Set());
+  const fileInputRefs = useRef<Record<number, HTMLInputElement | null>>({});
 
   const categories = [
     { id: 'food', name: t('food'), icon: UtensilsCrossed },
@@ -81,10 +94,34 @@ export function CategoryOffers() {
   ];
 
   const events = [
-    { id: 1, title: 'AIFC Morning Coffee', date: 'Thu, Apr 17 · 09:00', location: 'Master Coffee, AIFC Tower', type: 'cafe' as BizType },
-    { id: 2, title: 'FinTech Seminar 2026', date: 'Fri, Apr 18 · 14:00', location: 'AIFC Academy, Room 3', type: 'education' as BizType },
-    { id: 3, title: 'Networking Business Lunch', date: 'Sat, Apr 19 · 12:30', location: 'Chez Georges', type: 'restaurant' as BizType },
-    { id: 4, title: 'Wellness Morning', date: 'Sun, Apr 20 · 08:00', location: 'Rafe Beauty Lounge', type: 'spa' as BizType },
+    {
+      id: 1, title: 'AIFC Morning Coffee', date: 'Thu, Apr 17 · 09:00', location: 'Master Coffee, AIFC Tower', type: 'cafe' as BizType,
+      friendsGoing: [
+        { name: 'Kamila D.', initials: 'KD', color: '#f06ac8' },
+        { name: 'Arman K.', initials: 'AK', color: '#6aaff0' },
+        { name: 'Aizat B.', initials: 'AB', color: '#7c6af0' },
+      ],
+    },
+    {
+      id: 2, title: 'FinTech Seminar 2026', date: 'Fri, Apr 18 · 14:00', location: 'AIFC Academy, Room 3', type: 'education' as BizType,
+      friendsGoing: [
+        { name: 'Daniyar S.', initials: 'DS', color: '#f06a6a' },
+        { name: 'Farida B.', initials: 'FB', color: '#f06a80' },
+      ],
+    },
+    {
+      id: 3, title: 'Networking Business Lunch', date: 'Sat, Apr 19 · 12:30', location: 'Chez Georges', type: 'restaurant' as BizType,
+      friendsGoing: [
+        { name: 'Madina I.', initials: 'MI', color: '#c86af0' },
+        { name: 'Ruslan A.', initials: 'RA', color: '#6af0e0' },
+        { name: 'Zarina S.', initials: 'ZS', color: '#f0c86a' },
+        { name: 'Almas D.', initials: 'AD', color: '#f0a06a' },
+      ],
+    },
+    {
+      id: 4, title: 'Wellness Morning', date: 'Sun, Apr 20 · 08:00', location: 'Rafe Beauty Lounge', type: 'spa' as BizType,
+      friendsGoing: [],
+    },
   ];
 
   const tasks = [
@@ -101,11 +138,36 @@ export function CategoryOffers() {
     { id: 4, title: 'UX Designer', company: 'Fintech startup', type: 'Part-time' },
   ];
 
-  const newsPosts = [
-    { id: 1, author: 'AIFC HR', time: '2h ago', text: 'New parking passes are available at reception. Please collect before Friday.' },
-    { id: 2, author: 'AIFC Events', time: '5h ago', text: 'The Q2 Networking Breakfast is confirmed for April 17th. RSVP via the Events tab.' },
-    { id: 3, author: 'AIFC Security', time: '1d ago', text: 'Reminder: tail-gating is prohibited. All guests must be registered at Gate A.' },
-  ];
+  const [newsPosts, setNewsPosts] = useState<NewsPost[]>([
+    {
+      id: 1, author: 'AIFC HR', time: '2h ago',
+      text: 'New parking passes are available at reception. Please collect before Friday.',
+      image: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80',
+      attendees: [],
+    },
+    {
+      id: 2, author: 'AIFC Events', time: '5h ago',
+      text: 'The Q2 Networking Breakfast is confirmed for April 17th. RSVP via the Events tab.',
+      image: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=600&q=80',
+      attendees: [
+        { name: 'Kamila D.', initials: 'KD', color: '#f06ac8' },
+        { name: 'Arman K.', initials: 'AK', color: '#6aaff0' },
+        { name: 'Aizat B.', initials: 'AB', color: '#7c6af0' },
+        { name: 'Daniyar S.', initials: 'DS', color: '#f06a6a' },
+      ],
+    },
+    {
+      id: 3, author: 'AIFC Security', time: '1d ago',
+      text: 'Reminder: tail-gating is prohibited. All guests must be registered at Gate A.',
+      image: 'https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=600&q=80',
+      attendees: [],
+    },
+  ]);
+
+  const handlePhotoChange = (postId: number, file: File) => {
+    const url = URL.createObjectURL(file);
+    setNewsPosts(prev => prev.map(p => p.id === postId ? { ...p, image: url } : p));
+  };
 
   const filteredOffers = offers.filter((o) => {
     const matchCat = selectedCategory === 'all' || o.category === selectedCategory;
@@ -166,27 +228,84 @@ export function CategoryOffers() {
         <p className="text-xs text-muted-foreground leading-relaxed">{t('aifcDescription')}</p>
       </div>
 
-      {/* Tab switcher — sticky */}
+      {/* Tab switcher — 2-column grid */}
       <div className="sticky top-0 z-40 bg-card border-b border-border">
-        <div className="max-w-md mx-auto px-4">
-          <div className="flex gap-0 overflow-x-auto scrollbar-hide">
-            {tabs.map((tb) => (
-              <button
-                key={tb.key}
-                onClick={() => { setTab(tb.key); setSearchQuery(''); setSelectedCategory('all'); }}
-                className={`flex items-center gap-1.5 px-4 py-3.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors flex-shrink-0 ${
-                  tab === tb.key ? 'border-[#10b981] text-[#10b981]' : 'border-transparent text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                <tb.icon className="w-3.5 h-3.5" />
-                {tb.label}
-              </button>
-            ))}
+        <div className="max-w-md mx-auto px-4 pt-3 pb-2">
+          <div className="grid grid-cols-2 gap-2">
+            {tabs.map((tb, idx) => {
+              const isLastOdd = tabs.length % 2 !== 0 && idx === tabs.length - 1;
+              return (
+                <button
+                  key={tb.key}
+                  onClick={() => { setTab(tb.key); setSearchQuery(''); setSelectedCategory('all'); setFilterValue('all'); }}
+                  className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${isLastOdd ? 'col-span-2' : ''} ${
+                    tab === tb.key
+                      ? 'bg-[#10b981] text-white'
+                      : 'bg-input-background text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  <tb.icon className="w-3.5 h-3.5" />
+                  {tb.label}
+                </button>
+              );
+            })}
           </div>
         </div>
+
       </div>
 
       <div className="max-w-md mx-auto px-4 py-4">
+
+        {/* EVENTS filter */}
+        {tab === 'events' && (
+          <div className="flex gap-2 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-hide">
+            {['All','Café','Education','Restaurant','Wellness'].map((label) => {
+              const id = label === 'All' ? 'all' : label === 'Café' ? 'cafe' : label === 'Education' ? 'education' : label === 'Restaurant' ? 'restaurant' : 'spa';
+              return (
+                <button key={id} onClick={() => setFilterValue(id)}
+                  className={`px-3 py-1.5 rounded-xl text-sm whitespace-nowrap flex-shrink-0 transition-colors ${filterValue === id ? 'bg-[#10b981] text-white' : 'bg-input-background text-muted-foreground'}`}>
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {/* TASKS filter */}
+        {tab === 'tasks' && (
+          <div className="flex gap-2 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-hide">
+            {[{id:'all',label:'All'},{id:'pending',label:'Pending'},{id:'completed',label:'Completed'}].map(chip => (
+              <button key={chip.id} onClick={() => setFilterValue(chip.id)}
+                className={`px-3 py-1.5 rounded-xl text-sm whitespace-nowrap flex-shrink-0 transition-colors ${filterValue === chip.id ? 'bg-[#10b981] text-white' : 'bg-input-background text-muted-foreground'}`}>
+                {chip.label}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* VACANCIES filter */}
+        {tab === 'vacancies' && (
+          <div className="flex gap-2 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-hide">
+            {[{id:'all',label:'All'},{id:'Full-time',label:'Full-time'},{id:'Contract',label:'Contract'},{id:'Part-time',label:'Part-time'}].map(chip => (
+              <button key={chip.id} onClick={() => setFilterValue(chip.id)}
+                className={`px-3 py-1.5 rounded-xl text-sm whitespace-nowrap flex-shrink-0 transition-colors ${filterValue === chip.id ? 'bg-[#10b981] text-white' : 'bg-input-background text-muted-foreground'}`}>
+                {chip.label}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* NEWS filter */}
+        {tab === 'news' && (
+          <div className="flex gap-2 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-hide">
+            {[{id:'all',label:'All'},{id:'HR',label:'HR'},{id:'Events',label:'Events'},{id:'Security',label:'Security'}].map(chip => (
+              <button key={chip.id} onClick={() => setFilterValue(chip.id)}
+                className={`px-3 py-1.5 rounded-xl text-sm whitespace-nowrap flex-shrink-0 transition-colors ${filterValue === chip.id ? 'bg-[#10b981] text-white' : 'bg-input-background text-muted-foreground'}`}>
+                {chip.label}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* OFFERS TAB */}
         {tab === 'offers' && (
@@ -212,22 +331,18 @@ export function CategoryOffers() {
                 );
               })}
             </div>
-            <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-3">
               {filteredOffers.map((offer) => (
-                <Link key={offer.id} to={`/user/offer/${offer.id}`} className="block bg-card border border-border rounded-2xl p-4 hover:border-[#10b981] transition-colors">
-                  <div className="flex gap-3">
-                    <BusinessLogo name={offer.business} type={offer.type} size="lg" />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2 mb-1">
-                        <h3 className="truncate text-sm font-semibold">{offer.business}</h3>
-                        {offer.exclusive && (
-                          <span className="text-xs px-2 py-0.5 bg-[#f59e0b]/10 text-[#f59e0b] rounded-full whitespace-nowrap flex-shrink-0">{t('exclusive')}</span>
-                        )}
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-2">{offer.offer}</p>
-                      <span className="inline-flex items-center text-xs px-2 py-0.5 bg-[#10b981]/10 text-[#10b981] rounded-full">{t('active')}</span>
-                    </div>
+                <Link key={offer.id} to={`/user/offer/${offer.id}`} className="flex flex-col bg-card border border-border rounded-2xl p-3 hover:border-[#10b981] transition-colors">
+                  <div className="flex items-start justify-between mb-2">
+                    <BusinessLogo name={offer.business} type={offer.type} size="md" />
+                    {offer.exclusive && (
+                      <span className="text-[10px] px-1.5 py-0.5 bg-[#f59e0b]/10 text-[#f59e0b] rounded-full whitespace-nowrap leading-tight">{t('exclusive')}</span>
+                    )}
                   </div>
+                  <h3 className="text-xs font-semibold leading-tight mb-1 line-clamp-1">{offer.business}</h3>
+                  <p className="text-xs text-muted-foreground mb-2 line-clamp-2 flex-1">{offer.offer}</p>
+                  <span className="inline-flex items-center text-[10px] px-2 py-0.5 bg-[#10b981]/10 text-[#10b981] rounded-full self-start">{t('active')}</span>
                 </Link>
               ))}
             </div>
@@ -237,7 +352,7 @@ export function CategoryOffers() {
         {/* EVENTS TAB */}
         {tab === 'events' && (
           <div className="space-y-3">
-            {events.map((ev) => {
+            {events.filter(ev => filterValue === 'all' || ev.type === filterValue).map((ev) => {
               const gone = rsvped.has(ev.id);
               return (
                 <div key={ev.id} className="bg-card border border-border rounded-2xl p-4">
@@ -251,6 +366,32 @@ export function CategoryOffers() {
                       <p className="text-xs text-muted-foreground">{ev.location}</p>
                     </div>
                   </div>
+
+                  {/* Friends going */}
+                  {ev.friendsGoing.length > 0 && (
+                    <div className="flex items-center gap-2 mt-3">
+                      <div className="flex -space-x-2">
+                        {ev.friendsGoing.slice(0, 4).map((f) => (
+                          <div
+                            key={f.initials + f.name}
+                            title={f.name}
+                            className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold border-2 border-card"
+                            style={{ background: f.color + '30', color: f.color, borderColor: 'var(--card)' }}
+                          >
+                            {f.initials}
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        <span className="text-foreground font-medium">
+                          {ev.friendsGoing.slice(0, 2).map(f => f.name.split(' ')[0]).join(', ')}
+                        </span>
+                        {ev.friendsGoing.length > 2 && ` +${ev.friendsGoing.length - 2} more`}
+                        {' '}going
+                      </p>
+                    </div>
+                  )}
+
                   <button
                     onClick={() => setRsvped(prev => { const s = new Set(prev); gone ? s.delete(ev.id) : s.add(ev.id); return s; })}
                     className={`mt-3 w-full py-2 rounded-xl text-sm font-medium transition-colors ${gone ? 'bg-[#10b981] text-white' : 'bg-[#10b981]/10 text-[#10b981]'}`}
@@ -266,7 +407,12 @@ export function CategoryOffers() {
         {/* TASKS TAB */}
         {tab === 'tasks' && (
           <div className="space-y-3">
-            {tasks.map((task) => {
+            {tasks.filter(task => {
+              const done = taskDone.has(task.id) || task.done;
+              if (filterValue === 'pending') return !done;
+              if (filterValue === 'completed') return done;
+              return true;
+            }).map((task) => {
               const done = taskDone.has(task.id) || task.done;
               return (
                 <div key={task.id} className={`bg-card border rounded-2xl p-4 flex items-center gap-3 ${done ? 'border-[#10b981]/30 opacity-70' : 'border-border'}`}>
@@ -289,7 +435,7 @@ export function CategoryOffers() {
         {/* VACANCIES TAB */}
         {tab === 'vacancies' && (
           <div className="space-y-3">
-            {vacancies.map((v) => (
+            {vacancies.filter(v => filterValue === 'all' || v.type === filterValue).map((v) => (
               <div key={v.id} className="bg-card border border-border rounded-2xl p-4 flex items-center gap-3">
                 <div className="w-11 h-11 rounded-xl bg-[#3b82f6]/10 flex items-center justify-center flex-shrink-0">
                   <Briefcase className="w-5 h-5 text-[#3b82f6]" />
@@ -307,18 +453,75 @@ export function CategoryOffers() {
         {/* NEWS TAB */}
         {tab === 'news' && (
           <div className="space-y-3">
-            {newsPosts.map((post) => (
-              <div key={post.id} className="bg-card border border-border rounded-2xl p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-[#10b981]/10 flex items-center justify-center">
-                      <span className="text-[10px] font-bold text-[#10b981]">{post.author.slice(0, 2)}</span>
-                    </div>
-                    <p className="text-xs font-semibold">{post.author}</p>
-                  </div>
-                  <p className="text-[10px] text-muted-foreground">{post.time}</p>
+            {newsPosts.filter(post => filterValue === 'all' || post.author.includes(filterValue)).map((post) => (
+              <div key={post.id} className="bg-card border border-border rounded-2xl overflow-hidden">
+                {/* Photo with admin edit overlay */}
+                <div className="relative">
+                  {post.image && (
+                    <img src={post.image} alt="" className="w-full h-44 object-cover" />
+                  )}
+                  {isAdmin && (
+                    <>
+                      <input
+                        ref={el => { fileInputRefs.current[post.id] = el; }}
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={e => {
+                          const file = e.target.files?.[0];
+                          if (file) handlePhotoChange(post.id, file);
+                          e.target.value = '';
+                        }}
+                      />
+                      <button
+                        onClick={() => fileInputRefs.current[post.id]?.click()}
+                        className="absolute bottom-2 right-2 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-white transition-all hover:opacity-90"
+                        style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,255,255,0.15)' }}
+                      >
+                        <Camera className="w-3.5 h-3.5" />
+                        Change photo
+                      </button>
+                    </>
+                  )}
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">{post.text}</p>
+
+                <div className="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full bg-[#10b981]/10 flex items-center justify-center">
+                        <span className="text-[10px] font-bold text-[#10b981]">{post.author.slice(0, 2)}</span>
+                      </div>
+                      <p className="text-xs font-semibold">{post.author}</p>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground">{post.time}</p>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{post.text}</p>
+
+                  {/* Who's coming */}
+                  {post.attendees.length > 0 && (
+                    <div className="flex items-center gap-2 mt-3 pt-3 border-t border-border">
+                      <div className="flex -space-x-2">
+                        {post.attendees.slice(0, 5).map((a) => (
+                          <div
+                            key={a.name}
+                            title={a.name}
+                            className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold border-2"
+                            style={{ background: a.color + '30', color: a.color, borderColor: 'var(--card)' }}
+                          >
+                            {a.initials}
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        <span className="text-foreground font-medium">
+                          {post.attendees.slice(0, 2).map(a => a.name.split(' ')[0]).join(', ')}
+                        </span>
+                        {post.attendees.length > 2 && ` +${post.attendees.length - 2} more`}
+                        {' '}going
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
           </div>

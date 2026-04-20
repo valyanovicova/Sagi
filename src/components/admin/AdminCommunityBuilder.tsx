@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import {
   ChevronLeft, Pencil, GripVertical, Plus, ToggleLeft, ToggleRight,
   Users, Building2, Tag, TrendingUp, MoreHorizontal, ImagePlus, ShieldCheck, X,
@@ -23,6 +23,7 @@ interface ContentItem {
   sub: string;
   points?: number;
   status: ItemStatus;
+  image?: string;
 }
 
 interface Tab {
@@ -279,6 +280,8 @@ export function AdminCommunityBuilder() {
   const [newItemTitle, setNewItemTitle] = useState('');
   const [newItemSub, setNewItemSub] = useState('');
   const [newItemPoints, setNewItemPoints] = useState('');
+  const [newItemImage, setNewItemImage] = useState<string | null>(null);
+  const addPhotoRef = useRef<HTMLInputElement | null>(null);
 
   const activeTab = tabs.find((t) => t.key === activeKey) ?? tabs[0];
 
@@ -305,13 +308,14 @@ export function AdminCommunityBuilder() {
     setTabs((prev) =>
       prev.map((t) =>
         t.key === activeKey
-          ? { ...t, items: [...t.items, { id: Date.now(), title, sub: newItemSub.trim(), points: isNaN(pts) ? undefined : pts, status: 'draft' }] }
+          ? { ...t, items: [...t.items, { id: Date.now(), title, sub: newItemSub.trim(), points: isNaN(pts) ? undefined : pts, status: 'draft', image: newItemImage ?? undefined }] }
           : t
       )
     );
     setNewItemTitle('');
     setNewItemSub('');
     setNewItemPoints('');
+    setNewItemImage(null);
     setShowAddItem(false);
   };
 
@@ -562,10 +566,44 @@ export function AdminCommunityBuilder() {
                     className="w-full px-3 py-2 pr-10 bg-input-background border border-border rounded-xl focus:border-[#10b981] focus:outline-none text-sm" />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none">pts</span>
                 </div>
+
+                {/* Photo upload */}
+                <input
+                  ref={addPhotoRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={e => {
+                    const file = e.target.files?.[0];
+                    if (file) setNewItemImage(URL.createObjectURL(file));
+                    e.target.value = '';
+                  }}
+                />
+                {newItemImage ? (
+                  <div className="relative rounded-xl overflow-hidden">
+                    <img src={newItemImage} alt="preview" className="w-full h-32 object-cover" />
+                    <button
+                      onClick={() => setNewItemImage(null)}
+                      className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/60 flex items-center justify-center text-white hover:bg-black/80 transition-colors"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => addPhotoRef.current?.click()}
+                    className="w-full py-2.5 border border-dashed border-border rounded-xl flex items-center justify-center gap-2 text-xs text-muted-foreground hover:border-[#10b981]/50 hover:text-[#10b981] transition-colors"
+                  >
+                    <ImagePlus className="w-4 h-4" />
+                    Add photo (optional)
+                  </button>
+                )}
+
                 <div className="flex gap-2">
                   <button onClick={handleAddItem} disabled={!newItemTitle.trim()}
                     className="flex-1 py-2 bg-[#10b981] text-white rounded-xl text-sm font-medium disabled:opacity-40">Add</button>
-                  <button onClick={() => { setShowAddItem(false); setNewItemTitle(''); setNewItemSub(''); setNewItemPoints(''); }}
+                  <button onClick={() => { setShowAddItem(false); setNewItemTitle(''); setNewItemSub(''); setNewItemPoints(''); setNewItemImage(null); }}
                     className="px-4 py-2 bg-input-background text-muted-foreground rounded-xl text-sm">Cancel</button>
                 </div>
               </div>

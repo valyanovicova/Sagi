@@ -32,9 +32,12 @@ import { AdminBusinessAnalyticsDetail } from './components/admin/AdminBusinessAn
 import { AdminOfferAnalyticsDetail } from './components/admin/AdminOfferAnalyticsDetail';
 import { AdminCommunityBuilder } from './components/admin/AdminCommunityBuilder';
 import { BusinessCommunityPage } from './components/business/BusinessCommunityPage';
+import { NetworkPage } from './components/NetworkPage';
+import { SagiLanding } from './components/SagiLanding';
 
 export const router = createBrowserRouter([
   { path: '/', Component: RoleLanding },
+  { path: '/landing', Component: SagiLanding },
   { path: '/auth', Component: AuthLanding },
   { path: '/auth/login', Component: Login },
   { path: '/auth/register', Component: Register },
@@ -52,6 +55,7 @@ export const router = createBrowserRouter([
       { path: 'profile/notifications', Component: NotificationSettings },
       { path: 'profile/support', Component: SupportSettings },
       { path: 'join-community', Component: JoinCommunity },
+      { path: 'network', Component: NetworkPage },
     ],
   },
   {

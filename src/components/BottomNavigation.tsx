@@ -1,4 +1,4 @@
-import { Home, User } from 'lucide-react';
+import { Home, Network, User } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -24,6 +24,16 @@ export function BottomNavigation() {
         >
           <Home className="w-6 h-6" />
           <span className="text-xs">{t('communities')}</span>
+        </Link>
+
+        <Link
+          to="/network"
+          className={`flex flex-col items-center justify-center flex-1 gap-1 transition-colors ${
+            isActive('/network') ? 'text-[#10b981]' : 'text-muted-foreground'
+          }`}
+        >
+          <Network className="w-6 h-6" />
+          <span className="text-xs">Network</span>
         </Link>
 
         <Link
