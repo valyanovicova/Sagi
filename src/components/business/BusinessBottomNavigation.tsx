@@ -15,7 +15,7 @@ export function BusinessBottomNavigation() {
 
   const tabs = [
     { path: '/business', icon: LayoutDashboard, label: t('dashboard') },
-    { path: '/business/offers', icon: Tag, label: t('offersCount') },
+    { path: '/business/offers', icon: Tag, label: 'My Deals' },
     { path: '/business/scan', icon: ScanLine, label: t('scanQR') },
     { path: '/business/profile', icon: User, label: t('myProfile') },
   ];

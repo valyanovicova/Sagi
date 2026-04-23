@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronRight, Moon, Sun, Bell, HelpCircle, Languages, UserPlus, ArrowLeftRight, LogOut, User as UserIcon, Users } from 'lucide-react';
+import { ChevronRight, Moon, Sun, Bell, HelpCircle, Languages, UserPlus, ArrowLeftRight, LogOut, User as UserIcon, Users, MapPin, Network } from 'lucide-react';
 
 const LinkedInIcon = () => (
   <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor">
@@ -19,6 +19,7 @@ import sagiLogo from '../assets/sagi-logo.png';
 import { useAuth } from '../context/AuthContext';
 import { RoleSwitcherModal } from './RoleSwitcherModal';
 import { ContactsModal } from './ContactsModal';
+import { ConnectionsModal } from './ConnectionsModal';
 
 export function Profile() {
   const { theme, toggleTheme } = useTheme();
@@ -26,6 +27,7 @@ export function Profile() {
   const { logout } = useAuth();
   const [showSwitcher, setShowSwitcher] = useState(false);
   const [showContacts, setShowContacts] = useState(false);
+  const [showConnections, setShowConnections] = useState(false);
   const getLanguageName = (lang: string) => {
     switch (lang) {
       case 'en': return 'English';
@@ -54,55 +56,45 @@ export function Profile() {
           <div className="flex-1">
             <h2 className="mb-1">{language === 'en' ? 'Alima Alieva' : 'Алима Алиева'}</h2>
             <p className="text-sm text-muted-foreground">alima.alieva@example.com</p>
+            <div className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
+              <MapPin className="w-3 h-3 shrink-0" />
+              <span>Almaty, Kazakhstan</span>
+            </div>
+            <div className="flex gap-2 mt-1.5">
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
+                className="w-7 h-7 rounded-lg bg-[#10b981]/10 flex items-center justify-center text-[#10b981] hover:bg-[#10b981]/20 transition-colors">
+                <LinkedInIcon />
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
+                className="w-7 h-7 rounded-lg bg-[#10b981]/10 flex items-center justify-center text-[#10b981] hover:bg-[#10b981]/20 transition-colors">
+                <InstagramIcon />
+              </a>
+            </div>
           </div>
           <Link to="/user/profile/edit" className="text-[#10b981] text-sm">{t('edit')}</Link>
         </div>
 
-        {/* Tags & Social preview */}
-        {(() => {
-          const bio = 'Fintech enthusiast and AIFC resident. Open to collaboration and investment opportunities.';
-          const tags = ['Investor', 'Fintech'];
-          const socialLinks = [
-            { icon: <LinkedInIcon />, href: 'https://linkedin.com', label: 'LinkedIn' },
-            { icon: <InstagramIcon />, href: 'https://instagram.com', label: 'Instagram' },
-          ];
-          const hasBio = !!bio;
-          const hasTags = tags.length > 0;
-          const hasSocials = socialLinks.length > 0;
-          if (!hasBio && !hasTags && !hasSocials) return null;
-          return (
-            <div className="mb-5 space-y-3">
-              {hasBio && (
-                <p className="text-sm text-muted-foreground leading-relaxed">{bio}</p>
-              )}
-              {hasTags && (
-                <div className="flex flex-wrap gap-2">
-                  {tags.map((tag) => (
-                    <span key={tag} className="px-3 py-1 bg-[#10b981]/10 text-[#10b981] rounded-full text-xs font-medium">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-              {hasSocials && (
-                <div className="flex gap-3">
-                  {socialLinks.map(({ icon, href, label }) => (
-                    <a
-                      key={label}
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={label}
-                      className="w-8 h-8 rounded-xl bg-[#10b981]/10 flex items-center justify-center text-[#10b981] hover:bg-[#10b981]/20 transition-colors"
-                    >
-                      {icon}
-                    </a>
-                  ))}
-                </div>
-              )}
-            </div>
-          );
-        })()}
+        {/* Bio & Tags & Socials */}
+        <div className="mb-5 space-y-3">
+          <p className="text-sm text-muted-foreground leading-relaxed">Fintech enthusiast and AIFC resident. Open to collaboration and investment opportunities.</p>
+          <div className="flex flex-wrap gap-2">
+            {['Investor', 'Fintech'].map((tag) => (
+              <span key={tag} className="px-3 py-1 bg-[#10b981]/10 text-[#10b981] rounded-full text-xs font-medium">
+                {tag}
+              </span>
+            ))}
+          </div>
+          <div className="flex gap-3">
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
+              className="w-8 h-8 rounded-xl bg-[#10b981]/10 flex items-center justify-center text-[#10b981] hover:bg-[#10b981]/20 transition-colors">
+              <LinkedInIcon />
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
+              className="w-8 h-8 rounded-xl bg-[#10b981]/10 flex items-center justify-center text-[#10b981] hover:bg-[#10b981]/20 transition-colors">
+              <InstagramIcon />
+            </a>
+          </div>
+        </div>
 
         {/* Digital card — premium */}
         <div
@@ -201,28 +193,47 @@ export function Profile() {
           </div>
         </div>
 
-        {/* Join Community — below card */}
-        <div className="flex gap-3 mb-6">
+        {/* Connections */}
+        <button
+          onClick={() => setShowConnections(true)}
+          className="w-full flex items-center gap-3 bg-card border border-border rounded-2xl p-4 mb-3 hover:border-[#10b981]/50 transition-colors"
+        >
+          <div className="w-9 h-9 rounded-xl bg-[#10b981]/10 flex items-center justify-center shrink-0">
+            <Network className="w-5 h-5 text-[#10b981]" />
+          </div>
+          <span className="flex-1 font-medium text-left">
+            {language === 'kk' ? 'Байланыстар' : language === 'ru' ? 'Контакты' : 'Connections'}
+          </span>
+          <span className="text-sm font-semibold text-[#10b981] mr-1">42</span>
+          <ChevronRight className="w-5 h-5 text-muted-foreground" />
+        </button>
+
+        {/* Contacts */}
+        <button
+          onClick={() => setShowContacts(true)}
+          className="w-full flex items-center gap-3 bg-card border border-border rounded-2xl p-4 mb-3 hover:border-[#10b981]/50 transition-colors"
+        >
+          <div className="w-9 h-9 rounded-xl bg-[#10b981]/10 flex items-center justify-center shrink-0">
+            <Users className="w-5 h-5 text-[#10b981]" />
+          </div>
+          <span className="flex-1 font-medium text-left">Contacts</span>
+          <span className="text-sm font-semibold text-[#10b981] mr-1">14</span>
+          <ChevronRight className="w-5 h-5 text-muted-foreground" />
+        </button>
+
+        {/* Join Community */}
+        <div className="mb-6">
           <Link
             to="/user/join-community"
-            className="flex items-center gap-3 bg-card border border-border rounded-2xl p-4 flex-1 hover:border-[#10b981]/50 transition-colors"
+            className="flex items-center gap-3 bg-card border border-border rounded-2xl p-4 hover:border-[#10b981]/50 transition-colors"
           >
             <div className="w-9 h-9 rounded-xl bg-[#10b981]/10 flex items-center justify-center shrink-0">
               <UserPlus className="w-5 h-5 text-[#10b981]" />
             </div>
-            <span className="flex-1 font-medium">{t('joinNewCommunity')}</span>
+            <span className="flex-1 font-medium">{t('communities')}</span>
+            <span className="text-sm font-semibold text-[#10b981] mr-1">1</span>
             <ChevronRight className="w-5 h-5 text-muted-foreground" />
           </Link>
-
-          <button
-            onClick={() => setShowContacts(true)}
-            className="flex flex-col items-center justify-center gap-1.5 bg-card border border-border rounded-2xl p-4 hover:border-[#10b981]/50 transition-colors min-w-[80px]"
-          >
-            <div className="w-9 h-9 rounded-xl bg-[#10b981]/10 flex items-center justify-center">
-              <Users className="w-5 h-5 text-[#10b981]" />
-            </div>
-            <span className="text-xs font-medium">Contacts</span>
-          </button>
         </div>
 
         {/* Settings menu */}
@@ -303,6 +314,7 @@ export function Profile() {
 
       {showSwitcher && <RoleSwitcherModal onClose={() => setShowSwitcher(false)} />}
       {showContacts && <ContactsModal onClose={() => setShowContacts(false)} />}
+      {showConnections && <ConnectionsModal onClose={() => setShowConnections(false)} />}
     </div>
   );
 }

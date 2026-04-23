@@ -189,9 +189,6 @@ export function BusinessCommunityPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2 mb-1">
                         <h3 className="text-sm font-semibold truncate pr-6">{offer.title}</h3>
-                        {offer.exclusive && (
-                          <span className="text-xs px-2 py-0.5 bg-[#f59e0b]/10 text-[#f59e0b] rounded-full whitespace-nowrap flex-shrink-0">{t('exclusive')}</span>
-                        )}
                       </div>
                       <div className="flex items-center gap-2 mb-2">
                         <button

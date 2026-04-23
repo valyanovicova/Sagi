@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import * as topojson from 'topojson-client';
 import type { Topology, GeometryCollection } from 'topojson-specification';
 import * as d3 from 'd3';
-import { Search, Users, Briefcase, ChevronRight, X, LayoutList, Share2, Sparkles, MessageCircle, Send, Globe } from 'lucide-react';
+import { Search, Users, Briefcase, ChevronRight, X, LayoutList, Share2, Sparkles, MessageCircle, Send, Globe, MapPin } from 'lucide-react';
 
 const LinkedinIcon = () => (
   <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor">
@@ -39,6 +39,7 @@ interface Person {
   connectLabel: string;
   mutualCount: number;
   mutualNames: string[];
+  location?: string;
   socials: Socials;
   community: string;
   x?: number;
@@ -67,6 +68,7 @@ const people: Person[] = [
     connections: 14, projects: 8, years: 7,
     color: '#7c6af0', initials: 'AB', connectLabel: 'Connect',
     mutualCount: 3, mutualNames: ['Madina', 'Areli', 'Arman'],
+    location: 'Almaty, Kazakhstan',
     socials: { linkedin: '#', instagram: '#', telegram: '#' }, community: 'AIFC',
   },
   {
@@ -77,6 +79,7 @@ const people: Person[] = [
     connections: 22, projects: 5, years: 9,
     color: '#f06a6a', initials: 'DS', connectLabel: 'Message',
     mutualCount: 5, mutualNames: ['Kamila', 'Timur', 'Ruslan'],
+    location: 'Astana, Kazakhstan',
     socials: { linkedin: '#', whatsapp: '#', website: '#' }, community: 'TechHub',
   },
   {
@@ -87,6 +90,7 @@ const people: Person[] = [
     connections: 9, projects: 12, years: 5,
     color: '#6af0b8', initials: 'AY', connectLabel: 'Collaborate',
     mutualCount: 2, mutualNames: ['Aizat', 'Yana'],
+    location: 'Almaty, Kazakhstan',
     socials: { linkedin: '#', instagram: '#', website: '#' }, community: 'AIFC',
   },
   {
@@ -97,6 +101,7 @@ const people: Person[] = [
     connections: 11, projects: 19, years: 6,
     color: '#f0c46a', initials: 'TZ', connectLabel: 'Invite to project',
     mutualCount: 4, mutualNames: ['Yana', 'Bekkali', 'Daniyar'],
+    location: 'Astana, Kazakhstan',
     socials: { linkedin: '#', telegram: '#', whatsapp: '#' }, community: 'TechHub',
   },
   {
@@ -107,6 +112,7 @@ const people: Person[] = [
     connections: 31, projects: 3, years: 8,
     color: '#f06ac8', initials: 'KD', connectLabel: 'Pitch me',
     mutualCount: 6, mutualNames: ['Daniyar', 'Aslan', 'Ruslan'],
+    location: 'Almaty, Kazakhstan',
     socials: { linkedin: '#', telegram: '#' }, community: 'AIFC',
   },
   {
@@ -117,6 +123,7 @@ const people: Person[] = [
     connections: 18, projects: 7, years: 4,
     color: '#6aaff0', initials: 'AK', connectLabel: 'Collaborate',
     mutualCount: 3, mutualNames: ['Aizat', 'Areli', 'Madina'],
+    location: 'Almaty, Kazakhstan',
     socials: { linkedin: '#', instagram: '#', whatsapp: '#', telegram: '#' }, community: 'StartupConnect',
   },
   {
@@ -127,6 +134,7 @@ const people: Person[] = [
     connections: 7, projects: 11, years: 5,
     color: '#a8f06a', initials: 'YS', connectLabel: 'Need ML?',
     mutualCount: 2, mutualNames: ['Areli', 'Bekkali'],
+    location: 'Astana, Kazakhstan',
     socials: { linkedin: '#', telegram: '#', website: '#' }, community: 'TechHub',
   },
   {
@@ -137,6 +145,7 @@ const people: Person[] = [
     connections: 13, projects: 4, years: 12,
     color: '#f0906a', initials: 'AK', connectLabel: 'Ask a question',
     mutualCount: 2, mutualNames: ['Kamila', 'Ruslan'],
+    location: 'Almaty, Kazakhstan',
     socials: { linkedin: '#', whatsapp: '#' }, community: 'AIFC',
   },
   {
@@ -147,6 +156,7 @@ const people: Person[] = [
     connections: 40, projects: 6, years: 3,
     color: '#c86af0', initials: 'MI', connectLabel: 'Partnership',
     mutualCount: 7, mutualNames: ['Aizat', 'Areli', 'Saniya'],
+    location: 'Astana, Kazakhstan',
     socials: { linkedin: '#', instagram: '#', telegram: '#', whatsapp: '#' }, community: 'StartupConnect',
   },
   {
@@ -157,6 +167,7 @@ const people: Person[] = [
     connections: 25, projects: 9, years: 15,
     color: '#6af0e0', initials: 'RA', connectLabel: 'Discuss project',
     mutualCount: 4, mutualNames: ['Daniyar', 'Kamila', 'Saniya'],
+    location: 'Astana, Kazakhstan',
     socials: { linkedin: '#', whatsapp: '#', website: '#' }, community: 'AIFC',
   },
   {
@@ -167,6 +178,7 @@ const people: Person[] = [
     connections: 8, projects: 14, years: 10,
     color: '#f0e06a', initials: 'SB', connectLabel: 'View portfolio',
     mutualCount: 3, mutualNames: ['Madina', 'Ruslan', 'Timur'],
+    location: 'Astana, Kazakhstan',
     socials: { linkedin: '#', instagram: '#', website: '#' }, community: 'TechHub',
   },
   {
@@ -177,6 +189,7 @@ const people: Person[] = [
     connections: 16, projects: 2, years: 3,
     color: '#70f06a', initials: 'BS', connectLabel: 'Pilot in your RC?',
     mutualCount: 3, mutualNames: ['Timur', 'Yana', 'Madina'],
+    location: 'Almaty, Kazakhstan',
     socials: { linkedin: '#', telegram: '#', whatsapp: '#' }, community: 'StartupConnect',
   },
   {
@@ -187,6 +200,7 @@ const people: Person[] = [
     connections: 19, projects: 6, years: 8,
     color: '#f09a6a', initials: 'AN', connectLabel: 'Talk talent',
     mutualCount: 3, mutualNames: ['Aizat', 'Arman', 'Madina'],
+    location: 'Almaty, Kazakhstan',
     socials: { linkedin: '#', instagram: '#', telegram: '#' }, community: 'AIFC',
   },
   {
@@ -197,6 +211,7 @@ const people: Person[] = [
     connections: 10, projects: 4, years: 5,
     color: '#6a8af0', initials: 'DO', connectLabel: 'Explore Web3',
     mutualCount: 2, mutualNames: ['Daniyar', 'Bekkali'],
+    location: 'Almaty, Kazakhstan',
     socials: { linkedin: '#', telegram: '#', website: '#' }, community: 'TechHub',
   },
   {
@@ -207,6 +222,7 @@ const people: Person[] = [
     connections: 17, projects: 7, years: 6,
     color: '#f06a80', initials: 'FB', connectLabel: 'Discuss financials',
     mutualCount: 4, mutualNames: ['Kamila', 'Ruslan', 'Daniyar'],
+    location: 'Astana, Kazakhstan',
     socials: { linkedin: '#', whatsapp: '#' }, community: 'AIFC',
   },
   {
@@ -217,6 +233,7 @@ const people: Person[] = [
     connections: 12, projects: 30, years: 7,
     color: '#6af0d8', initials: 'SA', connectLabel: 'Smart home pilot',
     mutualCount: 3, mutualNames: ['Ruslan', 'Saniya', 'Bekkali'],
+    location: 'Astana, Kazakhstan',
     socials: { linkedin: '#', telegram: '#', whatsapp: '#' }, community: 'StartupConnect',
   },
   {
@@ -227,6 +244,7 @@ const people: Person[] = [
     connections: 28, projects: 45, years: 9,
     color: '#f0c86a', initials: 'ZS', connectLabel: 'Stage my property',
     mutualCount: 5, mutualNames: ['Areli', 'Saniya', 'Ruslan'],
+    location: 'Almaty, Kazakhstan',
     socials: { linkedin: '#', instagram: '#', website: '#' }, community: 'AIFC',
   },
   {
@@ -237,6 +255,7 @@ const people: Person[] = [
     connections: 21, projects: 8, years: 14,
     color: '#b06af0', initials: 'ND', connectLabel: 'Policy question',
     mutualCount: 4, mutualNames: ['Saniya', 'Ruslan', 'Aslan'],
+    location: 'Astana, Kazakhstan',
     socials: { linkedin: '#', telegram: '#' }, community: 'TechHub',
   },
   {
@@ -247,6 +266,7 @@ const people: Person[] = [
     connections: 33, projects: 11, years: 6,
     color: '#f06ab0', initials: 'AS', connectLabel: 'Get featured',
     mutualCount: 5, mutualNames: ['Daniyar', 'Kamila', 'Madina'],
+    location: 'Almaty, Kazakhstan',
     socials: { linkedin: '#', instagram: '#', telegram: '#', website: '#' }, community: 'StartupConnect',
   },
   {
@@ -257,6 +277,7 @@ const people: Person[] = [
     connections: 14, projects: 12, years: 11,
     color: '#6af090', initials: 'MI', connectLabel: 'Site management',
     mutualCount: 3, mutualNames: ['Ruslan', 'Saniya', 'Timur'],
+    location: 'Astana, Kazakhstan',
     socials: { linkedin: '#', whatsapp: '#' }, community: 'AIFC',
   },
   {
@@ -267,6 +288,7 @@ const people: Person[] = [
     connections: 27, projects: 15, years: 10,
     color: '#f0a06a', initials: 'AD', connectLabel: 'Sales talk',
     mutualCount: 4, mutualNames: ['Ruslan', 'Zarina', 'Kamila'],
+    location: 'Astana, Kazakhstan',
     socials: { linkedin: '#', instagram: '#', whatsapp: '#' }, community: 'TechHub',
   },
   {
@@ -277,6 +299,7 @@ const people: Person[] = [
     connections: 11, projects: 12, years: 7,
     color: '#6af0a0', initials: 'GT', connectLabel: 'ESG audit',
     mutualCount: 2, mutualNames: ['Saniya', 'Nurlan'],
+    location: 'Almaty, Kazakhstan',
     socials: { linkedin: '#', website: '#' }, community: 'StartupConnect',
   },
   {
@@ -287,6 +310,7 @@ const people: Person[] = [
     connections: 23, projects: 8, years: 9,
     color: '#6ab8f0', initials: 'BS', connectLabel: 'Finance talk',
     mutualCount: 3, mutualNames: ['Almas', 'Farida', 'Kamila'],
+    location: 'Astana, Kazakhstan',
     socials: { linkedin: '#', whatsapp: '#', telegram: '#' }, community: 'AIFC',
   },
   {
@@ -297,6 +321,7 @@ const people: Person[] = [
     connections: 35, projects: 18, years: 6,
     color: '#e06af0', initials: 'MA', connectLabel: 'Apply to program',
     mutualCount: 6, mutualNames: ['Daniyar', 'Kamila', 'Bekkali'],
+    location: 'Almaty, Kazakhstan',
     socials: { linkedin: '#', instagram: '#', telegram: '#', website: '#' }, community: 'TechHub',
   },
   {
@@ -307,6 +332,7 @@ const people: Person[] = [
     connections: 9, projects: 22, years: 5,
     color: '#f0d86a', initials: 'EB', connectLabel: 'Book a survey',
     mutualCount: 3, mutualNames: ['Saniya', 'Timur', 'Marat'],
+    location: 'Astana, Kazakhstan',
     socials: { linkedin: '#', instagram: '#', telegram: '#' }, community: 'StartupConnect',
   },
   {
@@ -317,6 +343,7 @@ const people: Person[] = [
     connections: 30, projects: 5, years: 7,
     color: '#f06a6a', initials: 'DM', connectLabel: 'Host an event',
     mutualCount: 5, mutualNames: ['Madina', 'Arman', 'Aigul'],
+    location: 'Astana, Kazakhstan',
     socials: { linkedin: '#', instagram: '#', telegram: '#', website: '#' }, community: 'AIFC',
   },
   {
@@ -327,6 +354,7 @@ const people: Person[] = [
     connections: 15, projects: 6, years: 8,
     color: '#6ae8f0', initials: 'AT', connectLabel: 'Research collab',
     mutualCount: 3, mutualNames: ['Nurlan', 'Serik', 'Timur'],
+    location: 'Astana, Kazakhstan',
     socials: { linkedin: '#', website: '#', telegram: '#' }, community: 'TechHub',
   },
   {
@@ -337,6 +365,7 @@ const people: Person[] = [
     connections: 13, projects: 9, years: 11,
     color: '#f06ab8', initials: 'ZO', connectLabel: 'Get a valuation',
     mutualCount: 3, mutualNames: ['Aslan', 'Farida', 'Bolat'],
+    location: 'Almaty, Kazakhstan',
     socials: { linkedin: '#', whatsapp: '#' }, community: 'StartupConnect',
   },
   {
@@ -347,6 +376,7 @@ const people: Person[] = [
     connections: 16, projects: 20, years: 5,
     color: '#a0f06a', initials: 'TR', connectLabel: 'Run my ads',
     mutualCount: 3, mutualNames: ['Arman', 'Dana', 'Aigul'],
+    location: 'Almaty, Kazakhstan',
     socials: { linkedin: '#', instagram: '#', telegram: '#' }, community: 'AIFC',
   },
   {
@@ -357,6 +387,7 @@ const people: Person[] = [
     connections: 18, projects: 7, years: 6,
     color: '#7a6af0', initials: 'BZ', connectLabel: 'AI collab',
     mutualCount: 4, mutualNames: ['Yana', 'Daniyar', 'Dias'],
+    location: 'Astana, Kazakhstan',
     socials: { linkedin: '#', telegram: '#', website: '#' }, community: 'TechHub',
   },
 ];
@@ -372,10 +403,12 @@ const rawLinks: [number, number][] = [
 ];
 
 // ─── Graph View ───────────────────────────────────────────────────────────────
-function GraphView({ onSelectPerson, activeCommunity, onCommunityChange }: {
+function GraphView({ onSelectPerson, activeCommunity, onCommunityChange, activeCity, onCityChange }: {
   onSelectPerson: (p: Person) => void;
   activeCommunity: string | null;
   onCommunityChange: (id: string | null) => void;
+  activeCity: string | null;
+  onCityChange: (city: string | null) => void;
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
   const nodeGroupRef = useRef<d3.Selection<SVGGElement, Person, SVGGElement, unknown> | null>(null);
@@ -417,20 +450,21 @@ function GraphView({ onSelectPerson, activeCommunity, onCommunityChange }: {
     globePathRef.current?.attr('d', p({ type: 'Sphere' } as d3.GeoPermissibleObjects));
   }, []);
 
-  // Search + community filter effect
+  // Search + community + city filter effect
   useEffect(() => {
     if (!nodeGroupRef.current) return;
     const q = graphSearch.toLowerCase().trim();
     nodeGroupRef.current.style('opacity', (d: Person) => {
       const communityMatch = !activeCommunity || d.community === activeCommunity;
-      if (!communityMatch) return '0.08';
+      const cityMatch = !activeCity || (d.location ?? '').toLowerCase().includes(activeCity.toLowerCase());
+      if (!communityMatch || !cityMatch) return '0.08';
       if (!q) return '1';
       const searchMatch = d.name.toLowerCase().includes(q) ||
         d.role.toLowerCase().includes(q) ||
         d.tags.some(t => t.toLowerCase().includes(q));
       return searchMatch ? '1' : '0.1';
     });
-  }, [graphSearch, activeCommunity]);
+  }, [graphSearch, activeCommunity, activeCity]);
 
   useEffect(() => {
     if (!svgRef.current) return;
@@ -689,6 +723,23 @@ function GraphView({ onSelectPerson, activeCommunity, onCommunityChange }: {
             </button>
           ))}
         </div>
+
+        {/* City filter pills */}
+        <div className="flex gap-2 pointer-events-auto overflow-x-auto max-w-xs w-full pb-0.5">
+          {[null, 'Almaty', 'Astana'].map(city => (
+            <button
+              key={city ?? 'all'}
+              onClick={() => onCityChange(city)}
+              className="shrink-0 px-3 py-1 rounded-full text-[11px] font-semibold border transition-all flex items-center gap-1"
+              style={activeCity === city
+                ? { background: 'rgba(16,185,129,0.25)', color: '#10b981', borderColor: '#10b981' }
+                : { background: 'rgba(6,13,24,0.75)', color: 'rgba(255,255,255,0.4)', borderColor: 'rgba(16,185,129,0.2)', backdropFilter: 'blur(8px)' }
+              }
+            >
+              {city === null ? '📍 All cities' : `📍 ${city}`}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Hint */}
@@ -706,9 +757,11 @@ export function NetworkPage() {
   const [selected, setSelected] = useState<Person | null>(null);
   const [connected, setConnected] = useState<Set<number>>(new Set());
   const [activeCommunity, setActiveCommunity] = useState<string | null>(null);
+  const [activeCity, setActiveCity] = useState<string | null>(null);
 
   const filtered = people.filter(p => {
     if (activeCommunity && p.community !== activeCommunity) return false;
+    if (activeCity && !(p.location ?? '').toLowerCase().includes(activeCity.toLowerCase())) return false;
     if (!search.trim()) return true;
     const q = search.toLowerCase();
     return p.name.toLowerCase().includes(q) ||
@@ -785,7 +838,7 @@ export function NetworkPage() {
               </div>
 
               {/* Community filter pills */}
-              <div className="flex gap-2 overflow-x-auto pb-0.5 scrollbar-hide">
+              <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
                 <button
                   onClick={() => setActiveCommunity(null)}
                   className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
@@ -810,6 +863,24 @@ export function NetworkPage() {
                   </button>
                 ))}
               </div>
+
+              {/* City filter pills */}
+              <div className="flex gap-2 overflow-x-auto pb-0.5 scrollbar-hide">
+                {[null, 'Almaty', 'Astana'].map(city => (
+                  <button
+                    key={city ?? 'all'}
+                    onClick={() => setActiveCity(city)}
+                    className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all flex items-center gap-1 ${
+                      activeCity === city
+                        ? 'bg-[#10b981]/15 text-[#10b981] border-[#10b981]'
+                        : 'bg-transparent text-muted-foreground border-border hover:border-[#10b981]/50'
+                    }`}
+                  >
+                    <MapPin className="w-3 h-3" />
+                    {city ?? 'All cities'}
+                  </button>
+                ))}
+              </div>
             </>
           )}
         </div>
@@ -818,7 +889,7 @@ export function NetworkPage() {
       {/* ── Graph view ── */}
       {view === 'graph' && (
         <div>
-          <GraphView onSelectPerson={p => setSelected(p)} activeCommunity={activeCommunity} onCommunityChange={setActiveCommunity} />
+          <GraphView onSelectPerson={p => setSelected(p)} activeCommunity={activeCommunity} onCommunityChange={setActiveCommunity} activeCity={activeCity} onCityChange={setActiveCity} />
         </div>
       )}
 
@@ -885,7 +956,7 @@ export function NetworkPage() {
         <div className="fixed inset-0 z-50 flex flex-col justify-end items-center" onClick={() => setSelected(null)}>
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
           <div
-            className="relative bg-card rounded-t-3xl p-6 max-h-[80vh] overflow-y-auto w-full max-w-md"
+            className="relative bg-card rounded-t-3xl p-6 pb-24 max-h-[80vh] overflow-y-auto w-full max-w-md"
             onClick={e => e.stopPropagation()}
           >
             <div className="w-10 h-1 bg-border rounded-full mx-auto mb-5" />
@@ -906,6 +977,12 @@ export function NetworkPage() {
               <div>
                 <div className="font-bold text-base text-foreground">{selected.name}</div>
                 <div className="text-sm text-muted-foreground mt-0.5">{selected.role}</div>
+                {selected.location && (
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
+                    <MapPin className="w-3 h-3 shrink-0" />
+                    <span>{selected.location}</span>
+                  </div>
+                )}
                 <div className="text-xs text-muted-foreground mt-1">
                   <span className="font-medium text-foreground">{selected.mutualCount}</span> mutual connections
                 </div>

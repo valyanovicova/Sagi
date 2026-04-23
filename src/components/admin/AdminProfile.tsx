@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BarChart2, ArrowLeftRight, LogOut, ChevronRight, Shield, Moon, Sun, Languages, Bell, HelpCircle, ExternalLink } from 'lucide-react';
+import { BarChart2, ArrowLeftRight, LogOut, ChevronRight, Shield, Moon, Sun, Languages, Bell, HelpCircle, ExternalLink, MapPin, Globe, Pencil, Check, X } from 'lucide-react';
 import { Link } from 'react-router';
 import { useLanguage } from '../../context/LanguageContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -11,6 +11,14 @@ export function AdminProfile() {
   const { theme, toggleTheme } = useTheme();
   const { user, logout } = useAuth();
   const [showRoleSwitcher, setShowRoleSwitcher] = useState(false);
+
+  // Community editable fields
+  const [communityLocation, setCommunityLocation] = useState('Astana, Kazakhstan');
+  const [editingLocation, setEditingLocation] = useState(false);
+  const [locationDraft, setLocationDraft] = useState('');
+  const [communityTags, setCommunityTags] = useState(['FinTech', 'PropTech', 'Investment']);
+  const [tagInput, setTagInput] = useState('');
+  const [editingTags, setEditingTags] = useState(false);
 
   const getLanguageName = (lang: string) => {
     switch (lang) {
@@ -115,6 +123,84 @@ export function AdminProfile() {
                     </div>
                     <span className="text-xs px-2 py-1 bg-[#10b981]/10 text-[#10b981] rounded-full shrink-0">{t('filterActive')}</span>
                   </div>
+
+                  {/* Location */}
+                  <div className="pl-12 mb-2">
+                    {!editingLocation ? (
+                      <button
+                        onClick={() => { setLocationDraft(communityLocation); setEditingLocation(true); }}
+                        className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-[#10b981] transition-colors"
+                      >
+                        {communityLocation
+                          ? <><MapPin className="w-3.5 h-3.5" />{communityLocation}</>
+                          : <><Globe className="w-3.5 h-3.5" />Worldwide · tap to set location</>}
+                        <Pencil className="w-3 h-3 opacity-50" />
+                      </button>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <input
+                          autoFocus
+                          type="text"
+                          value={locationDraft}
+                          onChange={e => setLocationDraft(e.target.value)}
+                          placeholder="City, Country or leave empty"
+                          className="flex-1 text-xs px-3 py-1.5 rounded-xl bg-input-background border border-[#10b981]/40 outline-none text-foreground placeholder:text-muted-foreground"
+                        />
+                        <button onClick={() => { setCommunityLocation(locationDraft.trim()); setEditingLocation(false); }} className="text-[#10b981]"><Check className="w-4 h-4" /></button>
+                        <button onClick={() => setEditingLocation(false)} className="text-muted-foreground"><X className="w-4 h-4" /></button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Tags */}
+                  <div className="pl-12 mb-2">
+                    <div className="flex flex-wrap gap-1.5">
+                      {communityTags.map(tag => (
+                        <span key={tag} className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/20">
+                          {tag}
+                          {editingTags && (
+                            <button onClick={() => setCommunityTags(communityTags.filter(t => t !== tag))} className="ml-0.5 hover:text-red-400 transition-colors">
+                              <X className="w-2.5 h-2.5" />
+                            </button>
+                          )}
+                        </span>
+                      ))}
+                      {editingTags ? (
+                        <div className="flex items-center gap-1">
+                          <input
+                            autoFocus
+                            type="text"
+                            value={tagInput}
+                            onChange={e => setTagInput(e.target.value)}
+                            onKeyDown={e => {
+                              if ((e.key === 'Enter' || e.key === ',') && tagInput.trim()) {
+                                e.preventDefault();
+                                const v = tagInput.trim().replace(/,$/, '');
+                                if (v && !communityTags.includes(v)) setCommunityTags([...communityTags, v]);
+                                setTagInput('');
+                              }
+                            }}
+                            placeholder="Add tag..."
+                            className="text-[10px] px-2 py-0.5 rounded-xl bg-input-background border border-[#10b981]/40 outline-none w-20 text-foreground placeholder:text-muted-foreground"
+                          />
+                          <button
+                            onClick={() => {
+                              const v = tagInput.trim();
+                              if (v && !communityTags.includes(v)) setCommunityTags([...communityTags, v]);
+                              setTagInput('');
+                              setEditingTags(false);
+                            }}
+                            className="text-[#10b981]"
+                          ><Check className="w-3 h-3" /></button>
+                        </div>
+                      ) : (
+                        <button onClick={() => setEditingTags(true)} className="text-[10px] px-2 py-0.5 rounded-full border border-dashed border-border text-muted-foreground hover:border-[#10b981]/50 hover:text-[#10b981] transition-colors">
+                          + tag
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
                   {c.bio && (
                     <p className="text-xs text-muted-foreground leading-relaxed mb-2 pl-12">{c.bio}</p>
                   )}

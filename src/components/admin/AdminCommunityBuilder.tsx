@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import {
   ChevronLeft, Pencil, GripVertical, Plus, ToggleLeft, ToggleRight,
   Users, Building2, Tag, TrendingUp, MoreHorizontal, ImagePlus, ShieldCheck, X,
-  List, Check, Trash2, Copy
+  List, Check, Trash2, Copy, MapPin, Globe
 } from 'lucide-react';
 import { Link } from 'react-router';
 
@@ -247,6 +247,12 @@ function ConstructModuleSheet({ onSave, onClose }: ConstructModuleProps) {
 export function AdminCommunityBuilder() {
   const [adminMode, setAdminMode] = useState(true);
   const [tabs, setTabs] = useState<Tab[]>(initialTabs);
+  const [location, setLocation] = useState('Astana, Kazakhstan');
+  const [editingLocation, setEditingLocation] = useState(false);
+  const [locationDraft, setLocationDraft] = useState('');
+  const [tags, setTags] = useState<string[]>(['FinTech', 'PropTech', 'Investment']);
+  const [tagInput, setTagInput] = useState('');
+  const [editingTags, setEditingTags] = useState(false);
   const [activeKey, setActiveKey] = useState('offers');
   const [showConstructSheet, setShowConstructSheet] = useState(false);
 
@@ -388,12 +394,29 @@ export function AdminCommunityBuilder() {
               <span className="text-xs px-2 py-0.5 bg-[#10b981]/10 text-[#10b981] rounded-full font-medium">Active</span>
             </div>
             <p className="text-xs text-muted-foreground">Astana International Financial Centre</p>
+            {!editingLocation ? (
+              <button
+                onClick={() => adminMode && (setLocationDraft(location), setEditingLocation(true))}
+                className="flex items-center gap-1 mt-0.5 text-xs text-muted-foreground hover:text-[#10b981] transition-colors"
+              >
+                {location ? <><MapPin className="w-3 h-3 shrink-0" />{location}</> : <><Globe className="w-3 h-3 shrink-0" />Worldwide</>}
+                {adminMode && <Pencil className="w-2.5 h-2.5 ml-0.5 opacity-50" />}
+              </button>
+            ) : (
+              <div className="flex items-center gap-1 mt-1">
+                <input
+                  autoFocus
+                  type="text"
+                  value={locationDraft}
+                  onChange={e => setLocationDraft(e.target.value)}
+                  placeholder="City, Country or leave empty"
+                  className="flex-1 text-xs px-2 py-1 rounded-lg bg-input-background border border-[#10b981]/40 outline-none text-foreground placeholder:text-muted-foreground"
+                />
+                <button onClick={() => { setLocation(locationDraft.trim()); setEditingLocation(false); }} className="text-[#10b981]"><Check className="w-3.5 h-3.5" /></button>
+                <button onClick={() => setEditingLocation(false)} className="text-muted-foreground"><X className="w-3.5 h-3.5" /></button>
+              </div>
+            )}
           </div>
-          {adminMode && (
-            <button className="pb-1 text-muted-foreground hover:text-[#10b981] transition-colors">
-              <Pencil className="w-4 h-4" />
-            </button>
-          )}
         </div>
 
         {/* ── Bento Stats ── */}
@@ -416,6 +439,58 @@ export function AdminCommunityBuilder() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* ── Tags ── */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {tags.map(tag => (
+            <span key={tag} className="flex items-center gap-1 text-xs px-3 py-1 rounded-full bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/20">
+              {tag}
+              {adminMode && (
+                <button onClick={() => setTags(tags.filter(t => t !== tag))} className="ml-0.5 hover:text-red-400 transition-colors">
+                  <X className="w-3 h-3" />
+                </button>
+              )}
+            </span>
+          ))}
+          {adminMode && (
+            editingTags ? (
+              <div className="flex items-center gap-1">
+                <input
+                  autoFocus
+                  type="text"
+                  value={tagInput}
+                  onChange={e => setTagInput(e.target.value)}
+                  onKeyDown={e => {
+                    if ((e.key === 'Enter' || e.key === ',') && tagInput.trim()) {
+                      e.preventDefault();
+                      const v = tagInput.trim().replace(/,$/, '');
+                      if (v && !tags.includes(v)) setTags([...tags, v]);
+                      setTagInput('');
+                    }
+                  }}
+                  placeholder="Add tag..."
+                  className="text-xs px-2 py-1 rounded-xl bg-input-background border border-[#10b981]/40 outline-none w-24 text-foreground placeholder:text-muted-foreground"
+                />
+                <button
+                  onClick={() => {
+                    const v = tagInput.trim();
+                    if (v && !tags.includes(v)) setTags([...tags, v]);
+                    setTagInput('');
+                    setEditingTags(false);
+                  }}
+                  className="text-[#10b981]"
+                ><Check className="w-3.5 h-3.5" /></button>
+                <button onClick={() => { setTagInput(''); setEditingTags(false); }} className="text-muted-foreground">
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ) : (
+              <button onClick={() => setEditingTags(true)} className="text-xs px-3 py-1 rounded-full border border-dashed border-border text-muted-foreground hover:border-[#10b981]/50 hover:text-[#10b981] transition-colors">
+                + tag
+              </button>
+            )
+          )}
         </div>
 
         {/* ── Tab bar ── */}

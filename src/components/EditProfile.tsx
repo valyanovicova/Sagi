@@ -1,4 +1,4 @@
-import { ChevronLeft, Camera, Plus, X, Globe } from 'lucide-react';
+import { ChevronLeft, Camera, Plus, X, Globe, MapPin } from 'lucide-react';
 
 const LinkedInIcon = () => (
   <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor">
@@ -25,7 +25,123 @@ const TelegramIcon = () => (
 );
 import { Link } from 'react-router';
 import { useLanguage } from '../context/LanguageContext';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+
+const CITY_OPTIONS = [
+  { city: 'Almaty', country: 'Kazakhstan' },
+  { city: 'Astana', country: 'Kazakhstan' },
+  { city: 'Shymkent', country: 'Kazakhstan' },
+  { city: 'Karaganda', country: 'Kazakhstan' },
+  { city: 'Aktobe', country: 'Kazakhstan' },
+  { city: 'Taraz', country: 'Kazakhstan' },
+  { city: 'Pavlodar', country: 'Kazakhstan' },
+  { city: 'Oskemen', country: 'Kazakhstan' },
+  { city: 'Semey', country: 'Kazakhstan' },
+  { city: 'Atyrau', country: 'Kazakhstan' },
+  { city: 'Moscow', country: 'Russia' },
+  { city: 'Saint Petersburg', country: 'Russia' },
+  { city: 'Novosibirsk', country: 'Russia' },
+  { city: 'Yekaterinburg', country: 'Russia' },
+  { city: 'Dubai', country: 'UAE' },
+  { city: 'Abu Dhabi', country: 'UAE' },
+  { city: 'Istanbul', country: 'Turkey' },
+  { city: 'Ankara', country: 'Turkey' },
+  { city: 'Tashkent', country: 'Uzbekistan' },
+  { city: 'Samarkand', country: 'Uzbekistan' },
+  { city: 'Bishkek', country: 'Kyrgyzstan' },
+  { city: 'Baku', country: 'Azerbaijan' },
+  { city: 'Tbilisi', country: 'Georgia' },
+  { city: 'London', country: 'UK' },
+  { city: 'Berlin', country: 'Germany' },
+  { city: 'Paris', country: 'France' },
+  { city: 'Amsterdam', country: 'Netherlands' },
+  { city: 'New York', country: 'USA' },
+  { city: 'San Francisco', country: 'USA' },
+  { city: 'Toronto', country: 'Canada' },
+  { city: 'Singapore', country: 'Singapore' },
+  { city: 'Seoul', country: 'South Korea' },
+  { city: 'Tokyo', country: 'Japan' },
+  { city: 'Beijing', country: 'China' },
+  { city: 'Shanghai', country: 'China' },
+  { city: 'Mumbai', country: 'India' },
+  { city: 'Delhi', country: 'India' },
+];
+
+function LocationDropdown({ value, onChange, language }: { value: string; onChange: (v: string) => void; language: string }) {
+  const [query, setQuery] = useState(value);
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setQuery(value);
+  }, [value]);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const filtered = query.trim()
+    ? CITY_OPTIONS.filter(
+        ({ city, country }) =>
+          city.toLowerCase().includes(query.toLowerCase()) ||
+          country.toLowerCase().includes(query.toLowerCase())
+      )
+    : CITY_OPTIONS;
+
+  const grouped = filtered.reduce<Record<string, string[]>>((acc, { city, country }) => {
+    if (!acc[country]) acc[country] = [];
+    acc[country].push(city);
+    return acc;
+  }, {});
+
+  const label = language === 'kk' ? 'Қала' : language === 'ru' ? 'Город' : 'City';
+  const placeholder = language === 'kk' ? 'Іздеу...' : language === 'ru' ? 'Поиск...' : 'Search...';
+
+  return (
+    <div ref={ref} className="relative">
+      <label className="flex items-center gap-1.5 text-sm text-muted-foreground mb-2">
+        <MapPin className="w-3.5 h-3.5" />
+        {label}
+      </label>
+      <input
+        type="text"
+        value={query}
+        placeholder={placeholder}
+        onFocus={() => setOpen(true)}
+        onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
+        className="w-full px-4 py-3 bg-input-background border border-border rounded-xl focus:border-[#10b981] focus:outline-none transition-colors"
+      />
+      {open && filtered.length > 0 && (
+        <div className="absolute z-50 left-0 right-0 mt-1 bg-card border border-border rounded-xl shadow-lg max-h-56 overflow-y-auto">
+          {Object.entries(grouped).map(([country, cities]) => (
+            <div key={country}>
+              <div className="px-4 py-1.5 text-xs font-semibold text-muted-foreground bg-muted/40 sticky top-0">
+                {country}
+              </div>
+              {cities.map((city) => {
+                const full = `${city}, ${country}`;
+                return (
+                  <button
+                    key={city}
+                    type="button"
+                    onMouseDown={() => { onChange(full); setQuery(full); setOpen(false); }}
+                    className="w-full text-left px-4 py-2.5 text-sm hover:bg-[#10b981]/10 hover:text-[#10b981] transition-colors"
+                  >
+                    {city}
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function EditProfile() {
   const { t, language } = useLanguage();
@@ -34,6 +150,7 @@ export function EditProfile() {
     lastName: language === 'en' ? 'Alieva' : 'Алиева',
     email: 'alima.alieva@example.com',
     phone: '+7 777 123 4567',
+    location: 'Almaty, Kazakhstan',
     bio: '',
   });
   const [tags, setTags] = useState<string[]>(['Investor', 'Fintech']);
@@ -146,6 +263,12 @@ export function EditProfile() {
                 className="w-full px-4 py-3 bg-input-background border border-border rounded-xl focus:border-[#10b981] focus:outline-none transition-colors"
               />
             </div>
+
+            <LocationDropdown
+              value={formData.location}
+              onChange={(v) => setFormData({ ...formData, location: v })}
+              language={language}
+            />
           </div>
 
           {/* Bio */}

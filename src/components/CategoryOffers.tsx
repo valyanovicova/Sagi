@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { ChevronLeft, Search, UtensilsCrossed, GraduationCap, Sparkles, ShoppingBag, Building2, Dumbbell, HeartPulse, Plane, Calendar, CheckSquare, Briefcase, Newspaper, Camera } from 'lucide-react';
+import { ChevronLeft, Search, UtensilsCrossed, GraduationCap, Sparkles, ShoppingBag, Building2, Dumbbell, HeartPulse, Plane, Calendar, CheckSquare, Briefcase, Newspaper, Camera, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 import { useLanguage } from '../context/LanguageContext';
 import { BusinessLogo } from './BusinessLogo';
@@ -35,6 +35,10 @@ export function CategoryOffers() {
   const [filterValue, setFilterValue] = useState('all');
   const [rsvped, setRsvped] = useState<Set<number>>(new Set());
   const [taskDone, setTaskDone] = useState<Set<number>>(new Set());
+  const [showBusinesses, setShowBusinesses] = useState(false);
+  const [bizSearch, setBizSearch] = useState('');
+  const [bizCategory, setBizCategory] = useState('all');
+  const [selectedBusiness, setSelectedBusiness] = useState('all');
   const fileInputRefs = useRef<Record<number, HTMLInputElement | null>>({});
 
   const categories = [
@@ -172,7 +176,8 @@ export function CategoryOffers() {
   const filteredOffers = offers.filter((o) => {
     const matchCat = selectedCategory === 'all' || o.category === selectedCategory;
     const matchSearch = o.business.toLowerCase().includes(searchQuery.toLowerCase()) || o.offer.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchCat && matchSearch;
+    const matchBiz = selectedBusiness === 'all' || o.business === selectedBusiness;
+    return matchCat && matchSearch && matchBiz;
   });
 
   const tabs: { key: Tab; label: string; icon: typeof Calendar }[] = [
@@ -218,7 +223,11 @@ export function CategoryOffers() {
               </svg>
             </div>
             <h1 className="text-white font-bold text-lg leading-tight">AIFC</h1>
-            <p className="text-white/60 text-xs mt-0.5">570 {t('members')} · 42 {t('businesses')}</p>
+            <p className="text-white/60 text-xs mt-0.5 flex items-center justify-center gap-1">
+              <Link to="/user/network" className="hover:text-white transition-colors underline-offset-2 hover:underline">570 {t('members')}</Link>
+              <span>·</span>
+              <button onClick={() => setShowBusinesses(true)} className="hover:text-white transition-colors underline-offset-2 hover:underline">42 {t('businesses')}</button>
+            </p>
           </div>
         </div>
       </div>
@@ -320,25 +329,41 @@ export function CategoryOffers() {
                 className="w-full pl-9 pr-4 py-2 bg-input-background rounded-xl border border-border focus:border-[#10b981] focus:outline-none transition-colors text-sm"
               />
             </div>
-            <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide mb-3">
-              <button onClick={() => setSelectedCategory('all')} className={`px-3 py-1.5 rounded-xl text-sm whitespace-nowrap transition-colors flex-shrink-0 ${selectedCategory === 'all' ? 'bg-[#10b981] text-white' : 'bg-input-background text-foreground'}`}>{t('all')}</button>
+            <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide mb-2">
+              <button onClick={() => { setSelectedCategory('all'); setSelectedBusiness('all'); }} className={`px-3 py-1.5 rounded-xl text-sm whitespace-nowrap transition-colors flex-shrink-0 ${selectedCategory === 'all' ? 'bg-[#10b981] text-white' : 'bg-input-background text-foreground'}`}>{t('all')}</button>
               {categories.map((cat) => {
                 const Icon = cat.icon;
                 return (
-                  <button key={cat.id} onClick={() => setSelectedCategory(cat.id)} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm whitespace-nowrap transition-colors flex-shrink-0 ${selectedCategory === cat.id ? 'bg-[#10b981] text-white' : 'bg-input-background text-foreground'}`}>
+                  <button key={cat.id} onClick={() => { setSelectedCategory(cat.id); setSelectedBusiness('all'); }} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm whitespace-nowrap transition-colors flex-shrink-0 ${selectedCategory === cat.id ? 'bg-[#10b981] text-white' : 'bg-input-background text-foreground'}`}>
                     <Icon className="w-3.5 h-3.5" />{cat.name}
                   </button>
                 );
               })}
             </div>
+            {/* Business filter */}
+            {(() => {
+              const bizList = Array.from(new Map(
+                offers.filter(o => selectedCategory === 'all' || o.category === selectedCategory).map(o => [o.business, o])
+              ).values());
+              return (
+                <div className="flex gap-2 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-hide mb-3">
+                  <button onClick={() => setSelectedBusiness('all')} className={`px-3 py-1.5 rounded-xl text-sm whitespace-nowrap transition-colors flex-shrink-0 ${selectedBusiness === 'all' ? 'bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/30' : 'bg-input-background text-muted-foreground'}`}>
+                    All businesses
+                  </button>
+                  {bizList.map(o => (
+                    <button key={o.business} onClick={() => setSelectedBusiness(o.business)}
+                      className={`px-3 py-1.5 rounded-xl text-sm whitespace-nowrap transition-colors flex-shrink-0 ${selectedBusiness === o.business ? 'bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/30' : 'bg-input-background text-muted-foreground'}`}>
+                      {o.business}
+                    </button>
+                  ))}
+                </div>
+              );
+            })()}
             <div className="grid grid-cols-2 gap-3">
               {filteredOffers.map((offer) => (
                 <Link key={offer.id} to={`/user/offer/${offer.id}`} className="flex flex-col bg-card border border-border rounded-2xl p-3 hover:border-[#10b981] transition-colors">
                   <div className="flex items-start justify-between mb-2">
                     <BusinessLogo name={offer.business} type={offer.type} size="md" />
-                    {offer.exclusive && (
-                      <span className="text-[10px] px-1.5 py-0.5 bg-[#f59e0b]/10 text-[#f59e0b] rounded-full whitespace-nowrap leading-tight">{t('exclusive')}</span>
-                    )}
                   </div>
                   <h3 className="text-xs font-semibold leading-tight mb-1 line-clamp-1">{offer.business}</h3>
                   <p className="text-xs text-muted-foreground mb-2 line-clamp-2 flex-1">{offer.offer}</p>
@@ -528,6 +553,79 @@ export function CategoryOffers() {
         )}
 
       </div>
+
+      {/* Businesses modal */}
+      {showBusinesses && (() => {
+        const unique = Array.from(new Map(offers.map(o => [o.business, o])).values());
+        const filtered = unique.filter(o =>
+          (bizCategory === 'all' || o.category === bizCategory) &&
+          o.business.toLowerCase().includes(bizSearch.toLowerCase())
+        );
+        return (
+          <div
+            className="fixed inset-0 z-50 flex flex-col justify-end items-center"
+            style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }}
+            onClick={() => { setShowBusinesses(false); setBizSearch(''); setBizCategory('all'); }}
+          >
+            <div
+              className="w-full max-w-md bg-card rounded-t-3xl flex flex-col"
+              style={{ maxHeight: '88vh' }}
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="flex justify-center pt-3 pb-1 shrink-0">
+                <div className="w-10 h-1 rounded-full bg-border" />
+              </div>
+              <div className="flex items-center justify-between px-5 py-3 border-b border-border shrink-0">
+                <div>
+                  <h2 className="text-lg font-semibold">Businesses</h2>
+                  <p className="text-xs text-muted-foreground">{unique.length} companies</p>
+                </div>
+                <button onClick={() => { setShowBusinesses(false); setBizSearch(''); setBizCategory('all'); }} className="w-8 h-8 rounded-full bg-input-background flex items-center justify-center">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              <div className="px-4 pt-3 pb-2 shrink-0">
+                <div className="flex items-center gap-2 rounded-2xl px-3 py-2.5 bg-input-background mb-3">
+                  <Search className="w-4 h-4 text-muted-foreground shrink-0" />
+                  <input
+                    type="text"
+                    placeholder="Search businesses..."
+                    value={bizSearch}
+                    onChange={e => setBizSearch(e.target.value)}
+                    className="bg-transparent text-sm outline-none flex-1 placeholder:text-muted-foreground"
+                  />
+                  {bizSearch && <button onClick={() => setBizSearch('')} className="text-muted-foreground"><X className="w-3.5 h-3.5" /></button>}
+                </div>
+                <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-hide">
+                  <button onClick={() => setBizCategory('all')} className={`px-3 py-1.5 rounded-xl text-sm whitespace-nowrap flex-shrink-0 transition-colors ${bizCategory === 'all' ? 'bg-[#10b981] text-white' : 'bg-input-background text-muted-foreground'}`}>All</button>
+                  {categories.map(cat => {
+                    const Icon = cat.icon;
+                    return (
+                      <button key={cat.id} onClick={() => setBizCategory(cat.id)} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm whitespace-nowrap flex-shrink-0 transition-colors ${bizCategory === cat.id ? 'bg-[#10b981] text-white' : 'bg-input-background text-muted-foreground'}`}>
+                        <Icon className="w-3.5 h-3.5" />{cat.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="overflow-y-auto flex-1 px-4 pb-8 pt-2 space-y-2">
+                {filtered.length === 0 && (
+                  <p className="text-center text-sm text-muted-foreground py-10">No results</p>
+                )}
+                {filtered.map(o => (
+                  <div key={o.business} className="flex items-center gap-3 bg-input-background rounded-2xl px-3 py-3">
+                    <BusinessLogo name={o.business} type={o.type} size="sm" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{o.business}</p>
+                      <p className="text-xs text-muted-foreground capitalize">{o.category}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }

@@ -138,8 +138,22 @@ export function CommunityFeed() {
                   )}
                   <div className="flex-1 cursor-pointer" onClick={() => setSelectedCommunity(community)}>
                     <h3 className="mb-0.5">{community.name}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {community.members} {t('members')} · {community.businesses} {t('businesses')}
+                    <p className="text-sm text-muted-foreground flex items-center gap-1">
+                      <Link
+                        to="/user/network"
+                        onClick={e => e.stopPropagation()}
+                        className="hover:text-[#10b981] transition-colors"
+                      >
+                        {community.members} {t('members')}
+                      </Link>
+                      <span>·</span>
+                      <Link
+                        to={`/user/community/${community.id}`}
+                        onClick={e => e.stopPropagation()}
+                        className="hover:text-[#10b981] transition-colors"
+                      >
+                        {community.businesses} {t('businesses')}
+                      </Link>
                     </p>
                   </div>
                   <Link to={`/user/community/${community.id}`}>

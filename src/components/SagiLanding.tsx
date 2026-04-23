@@ -73,17 +73,19 @@ const FEATURE_GROUPS = [
 
 function FeatureGroupList() {
   return (
-    <div className="space-y-4">
+    <div className="space-y-8">
       {FEATURE_GROUPS.map(g => (
         <div key={g.label}>
-          <div className={`inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider mb-2.5 ${g.color}`}>
-            {g.label}
+          <div className="flex justify-center mb-5">
+            <div className={`inline-flex items-center px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider ${g.color}`}>
+              {g.label}
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-x-3 gap-y-1.5">
+          <div className="grid grid-cols-2 max-w-2xl mx-auto gap-y-3">
             {g.items.map(f => (
-              <div key={f.label} className="flex items-center gap-2 text-[13px] text-[#374151]">
-                <CheckCircle size={13} style={{ color: GREEN }} className="flex-shrink-0" />
-                {f.label}
+              <div key={f.label} className="flex items-center gap-3 px-4">
+                <CheckCircle size={16} style={{ color: GREEN, flexShrink: 0 }} />
+                <span className="text-[15px] font-semibold text-[#1F2937]">{f.label}</span>
               </div>
             ))}
           </div>
@@ -156,9 +158,6 @@ export function SagiLanding() {
               <a key={l} href={h} className="text-sm text-[#6B7280] hover:text-[#111827] transition font-medium">{l}</a>
             ))}
           </div>
-          <a href="mailto:info@sagi.kz" className="btn-green inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold shadow-sm">
-            Обсудить внедрение <ArrowRight size={14} />
-          </a>
         </div>
       </nav>
 
@@ -186,11 +185,8 @@ export function SagiLanding() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-14">
-              <a href="mailto:info@sagi.kz" className="btn-green inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold text-base shadow-md">
-                Обсудить внедрение <ArrowRight size={17} />
-              </a>
-              <a href="#Тарифы" className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl border-2 border-[#E5E7EB] bg-white text-[#374151] font-semibold text-base hover:border-[#B6EDD2] transition">
-                Посмотреть тарифы
+              <a href="#Тарифы" className="btn-green inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold text-base shadow-md">
+                Посмотреть тарифы <ArrowRight size={17} />
               </a>
             </div>
 
@@ -372,8 +368,9 @@ export function SagiLanding() {
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
-            {FEATURES.map((f, i) => (
+          {/* 11 features grid */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3.5 mb-5">
+            {FEATURES.filter(f => f.label !== 'Менеджер по работе с бизнесами' && f.label !== 'Apple Wallet карта' && f.label !== 'Контроль сроков действия').map((f, i) => (
               <div key={i} className="card-border card-lift flex items-center gap-4 p-4 rounded-2xl bg-white hover:bg-[#FAFFFE] transition-colors group">
                 <div className="icon-green w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0">
                   {f.icon}
@@ -381,6 +378,53 @@ export function SagiLanding() {
                 <span className="text-sm font-semibold text-[#374151]">{f.label}</span>
               </div>
             ))}
+
+            {/* Apple Wallet - featured card */}
+            <div
+              className="card-lift flex items-center gap-4 p-4 rounded-2xl row-span-1"
+              style={{ background: `linear-gradient(135deg, ${GREEN} 0%, ${GREEN_DARK} 100%)`, border: `1.5px solid ${GREEN}` }}
+            >
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 bg-white/20">
+                <CreditCard size={17} className="text-white" />
+              </div>
+              <div>
+                <div className="text-sm font-bold text-white">Apple Wallet карта</div>
+                <div className="text-[11px] text-white/70 mt-0.5">Членство прямо в смартфоне</div>
+              </div>
+            </div>
+
+            {/* Контроль сроков - span 2 */}
+            <div className="card-border card-lift flex items-center gap-4 p-4 rounded-2xl bg-white hover:bg-[#FAFFFE] transition-colors sm:col-span-2 lg:col-span-2">
+              <div className="icon-green w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0">
+                <Clock size={17} />
+              </div>
+              <div>
+                <div className="text-sm font-semibold text-[#374151]">Контроль сроков действия</div>
+                <div className="text-xs text-[#9CA3AF] mt-0.5">Карта автоматически деактивируется по окончании членства - доступ к скидкам сохраняется только у активных участников</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Manager highlight card */}
+          <div className="rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5" style={{ background: 'linear-gradient(135deg, #EDFAF3 0%, #F7FDF9 100%)', border: '1.5px solid #B6EDD2' }}>
+            <div className="icon-green w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0">
+              <Users size={22} />
+            </div>
+            <div className="flex-1">
+              <div className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: GREEN }}>Персональный менеджер</div>
+              <div className="text-base font-black text-[#111827] mb-1.5">Менеджер по работе с бизнесами</div>
+              <p className="text-sm text-[#6B7280] leading-relaxed">
+                Выделенный менеджер Sagi самостоятельно ведёт переговоры с партнёрами, договаривается об условиях и наполняет каталог скидок актуальными офферами - вам не нужно тратить на это время.
+              </p>
+            </div>
+            <div className="flex flex-col gap-2 flex-shrink-0">
+              {['Переговоры с бизнесами', 'Наполнение каталога', 'Контроль условий'].map(t => (
+                <div key={t} className="flex items-center gap-2 text-xs font-semibold" style={{ color: GREEN_DARK }}>
+                  <CheckCircle size={13} style={{ color: GREEN }} />
+                  {t}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -481,7 +525,8 @@ export function SagiLanding() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          {/* Price cards */}
+          <div className="grid md:grid-cols-2 gap-6 mb-6">
             {/* Monthly */}
             <div className="card-border card-lift rounded-2xl p-8 bg-white">
               <div className="text-xs font-bold text-[#9CA3AF] uppercase tracking-widest mb-4">Ежемесячно</div>
@@ -490,8 +535,7 @@ export function SagiLanding() {
                 <span className="text-[#9CA3AF] text-sm pb-2">/мес · за резидента</span>
               </div>
               <div className="text-[#9CA3AF] text-sm mb-7">Оплата каждый месяц, без обязательств</div>
-              <FeatureGroupList />
-              <a href="mailto:info@sagi.kz" className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl border-2 font-bold text-sm hover:bg-[#FAFFFE] transition mt-7" style={{ borderColor: GREEN, color: GREEN }}>
+              <a href="mailto:info@sagi.kz" className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl border-2 font-bold text-sm hover:bg-[#FAFFFE] transition" style={{ borderColor: GREEN, color: GREEN }}>
                 Начать внедрение <ChevronRight size={15} />
               </a>
             </div>
@@ -499,7 +543,7 @@ export function SagiLanding() {
             {/* Annual */}
             <div className="price-card-featured card-lift rounded-2xl p-8 bg-white relative">
               <div className="absolute top-5 right-5 annual-pill text-xs font-bold px-3 py-1.5 rounded-full">
-                −30% · Выгоднее
+                -30% · Выгоднее
               </div>
               <div className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: GREEN }}>Ежегодно</div>
               <div className="flex items-end gap-1.5 mb-1">
@@ -510,11 +554,15 @@ export function SagiLanding() {
                 <span className="text-[#D1D5DB] text-sm line-through">$240/год</span>
                 <span className="text-sm font-bold text-emerald-600">Экономия $70 на резиденте</span>
               </div>
-              <FeatureGroupList />
-              <a href="mailto:info@sagi.kz" className="btn-green w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-sm shadow-md mt-7">
+              <a href="mailto:info@sagi.kz" className="btn-green w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-sm shadow-md">
                 Получить годовой тариф <ChevronRight size={15} />
               </a>
             </div>
+          </div>
+
+          {/* What's included — shared block */}
+          <div className="card-border rounded-2xl p-8 bg-white">
+            <FeatureGroupList />
           </div>
 
           <p className="text-center text-sm text-[#9CA3AF] mt-6">
