@@ -43,6 +43,7 @@ export function CommunityFeed() {
 
   const communities = [
     { id: 1, name: t('aifcName'), type: 'office' as const, members: 570, businesses: 42, description: t('aifcDescription'), instagram: 'https://instagram.com/aifc.kz', facebook: 'https://facebook.com/aifc.kz', telegram: 'https://t.me/aifc_official', website: 'https://aifc.kz' },
+    { id: 'hani', name: 'hani', type: 'retail' as const, members: 1840, businesses: 64, description: 'Бонусная экосистема hani — кэшбэк и офферы от партнёров.' },
     { id: 2, name: 'Astana Hub', type: 'tech' as const, members: 320, businesses: 18, description: 'Tech and startup community in Astana.', telegram: 'https://t.me/astana_hub' },
     { id: 3, name: 'EXPO', type: 'district' as const, members: 210, businesses: 27, description: 'EXPO 2017 legacy business community.' },
   ];
@@ -112,6 +113,10 @@ export function CommunityFeed() {
                         <circle cx="32" cy="32" r="4.5" fill="#111" />
                       </svg>
                     </button>
+                  ) : community.id === 'hani' ? (
+                    <Link to="/user/community/hani" onClick={e => e.stopPropagation()} className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 shadow-sm border border-border">
+                      <img src="/hani.jpeg" alt="hani" className="w-full h-full object-cover" />
+                    </Link>
                   ) : community.id === 2 ? (
                     <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedCommunity(community); }} className="w-10 h-10 rounded-xl bg-white flex items-center justify-center flex-shrink-0 p-1 shadow-sm border border-border">
                       {/* Astana Hub — concentric rings */}
@@ -156,7 +161,7 @@ export function CommunityFeed() {
                       </Link>
                     </p>
                   </div>
-                  <Link to={`/user/community/${community.id}`}>
+                  <Link to={community.id === 'hani' ? '/user/community/hani' : `/user/community/${community.id}`}>
                     <ChevronRight className="w-5 h-5 text-muted-foreground hover:text-[#10b981] transition-colors" />
                   </Link>
                 </div>

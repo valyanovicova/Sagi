@@ -1,20 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useSearchParams } from 'react-router';
 import * as topojson from 'topojson-client';
 import type { Topology, GeometryCollection } from 'topojson-specification';
 import * as d3 from 'd3';
-import { Search, Users, Briefcase, ChevronRight, X, LayoutList, Share2, Sparkles, MessageCircle, Send, Globe, MapPin } from 'lucide-react';
+import { Search, Users, ChevronRight, X, LayoutList, Share2, Sparkles, MapPin } from 'lucide-react';
 
-const LinkedinIcon = () => (
-  <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor">
-    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
-  </svg>
-);
-
-const InstagramIcon = () => (
-  <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-  </svg>
-);
 
 interface Socials {
   linkedin?: string;
@@ -50,6 +40,7 @@ interface Person {
 
 const MY_COMMUNITIES = [
   { id: 'AIFC', label: 'AIFC' },
+  { id: 'hani', label: 'hani' },
   { id: 'TechHub', label: 'Tech Hub KZ' },
   { id: 'StartupConnect', label: 'Startup Connect' },
 ];
@@ -390,9 +381,43 @@ const people: Person[] = [
     location: 'Astana, Kazakhstan',
     socials: { linkedin: '#', telegram: '#', website: '#' }, community: 'TechHub',
   },
+  {
+    id: 31, name: 'Aigerim Bekova', role: 'Кондитер',
+    tags: ['Торты', 'Десерты', 'Astana'],
+    bio: 'Главный кондитер Hani Kitchen. Специализируется на авторских свадебных тортах.',
+    aiSummary: ['Опытный кондитер с 5-летним стажем в Hani.', 'Специализируется на свадебных и фирменных тортах.', 'Отличный контакт для event-планировщиков.'],
+    connections: 12, projects: 20, years: 5,
+    color: '#F5C400', initials: 'AB', connectLabel: 'Connect',
+    mutualCount: 2, mutualNames: ['Madina', 'Dana'],
+    location: 'Astana, Kazakhstan',
+    socials: { instagram: '#', telegram: '#' }, community: 'hani',
+  },
+  {
+    id: 32, name: 'Dauren Seitkali', role: 'Бариста',
+    tags: ['Кофе', 'Hani', 'Hospitality'],
+    bio: 'Старший бариста Hani Café. Чемпион Казахстана по латте-арт.',
+    aiSummary: ['Чемпион Казахстана по латте-арт.', 'Представляет hani на международных кофейных фестивалях.', 'Хороший контакт для кофейной индустрии.'],
+    connections: 8, projects: 5, years: 4,
+    color: '#CC8F00', initials: 'DS', connectLabel: 'Connect',
+    mutualCount: 2, mutualNames: ['Aigerim', 'Dana'],
+    location: 'Astana, Kazakhstan',
+    socials: { instagram: '#', telegram: '#' }, community: 'hani',
+  },
+  {
+    id: 33, name: 'Alina Sova', role: 'Event Manager',
+    tags: ['Events', 'Кейтеринг', 'Hani'],
+    bio: 'Организует корпоративные мероприятия и кейтеринг от Hani Events.',
+    aiSummary: ['Организовала более 50 корпоративных мероприятий с Hani.', 'Отвечает за кейтеринг-направление в сети.', 'Полезный контакт для event-организаторов.'],
+    connections: 15, projects: 50, years: 3,
+    color: '#E6A800', initials: 'AS', connectLabel: 'Connect',
+    mutualCount: 2, mutualNames: ['Madina', 'Dana'],
+    location: 'Astana, Kazakhstan',
+    socials: { linkedin: '#', instagram: '#', telegram: '#' }, community: 'hani',
+  },
 ];
 
 const rawLinks: [number, number][] = [
+  [31,32],[31,33],[32,33],[31,9],[33,26],
   [1,2],[1,3],[1,6],[1,13],[2,4],[2,5],[2,10],[2,14],[2,30],[3,6],[3,7],[3,17],
   [4,7],[4,12],[4,16],[4,25],[5,2],[5,8],[5,10],[5,15],[5,24],[6,9],[6,13],[6,29],
   [7,12],[7,15],[7,30],[8,10],[8,18],[8,28],[9,1],[9,3],[9,11],[9,17],[9,26],
@@ -752,11 +777,12 @@ function GraphView({ onSelectPerson, activeCommunity, onCommunityChange, activeC
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export function NetworkPage() {
+  const [searchParams] = useSearchParams();
   const [view, setView] = useState<'list' | 'graph'>('list');
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<Person | null>(null);
   const [connected, setConnected] = useState<Set<number>>(new Set());
-  const [activeCommunity, setActiveCommunity] = useState<string | null>(null);
+  const [activeCommunity, setActiveCommunity] = useState<string | null>(searchParams.get('community'));
   const [activeCity, setActiveCity] = useState<string | null>(null);
 
   const filtered = people.filter(p => {
@@ -997,18 +1023,12 @@ export function NetworkPage() {
               ))}
             </div>
 
-            <div className="grid grid-cols-3 gap-3 mb-5">
-              {[
-                { icon: Users, value: selected.connections, label: 'Connections' },
-                { icon: Briefcase, value: selected.projects, label: 'Projects' },
-                { icon: Users, value: selected.years, label: 'Yrs exp' },
-              ].map(({ icon: Icon, value, label }) => (
-                <div key={label} className="bg-muted/40 rounded-2xl p-3 text-center">
-                  <Icon className="w-4 h-4 mx-auto mb-1 text-muted-foreground" />
-                  <div className="text-base font-bold text-foreground">{value}</div>
-                  <div className="text-[10px] text-muted-foreground">{label}</div>
-                </div>
-              ))}
+            <div className="mb-5">
+              <div className="bg-muted/40 rounded-2xl p-3 text-center">
+                <Users className="w-4 h-4 mx-auto mb-1 text-muted-foreground" />
+                <div className="text-base font-bold text-foreground">{selected.connections}</div>
+                <div className="text-[10px] text-muted-foreground">Connections</div>
+              </div>
             </div>
 
             {/* AI Summary */}
@@ -1032,40 +1052,6 @@ export function NetworkPage() {
               Reach via:{' '}
               <span className="text-foreground font-medium">{selected.mutualNames.join(', ')}</span>
             </p>
-
-            {/* Social links */}
-            <div className="flex items-center gap-3 mb-5">
-              {selected.socials.linkedin && (
-                <a href={selected.socials.linkedin} className="flex items-center gap-1.5 flex-1 justify-center py-2.5 rounded-xl bg-muted/50 text-muted-foreground hover:text-foreground transition-colors text-xs font-medium">
-                  <LinkedinIcon />
-                  LinkedIn
-                </a>
-              )}
-              {selected.socials.instagram && (
-                <a href={selected.socials.instagram} className="flex items-center gap-1.5 flex-1 justify-center py-2.5 rounded-xl bg-muted/50 text-muted-foreground hover:text-foreground transition-colors text-xs font-medium">
-                  <InstagramIcon />
-                  Instagram
-                </a>
-              )}
-              {selected.socials.whatsapp && (
-                <a href={selected.socials.whatsapp} className="flex items-center gap-1.5 flex-1 justify-center py-2.5 rounded-xl bg-muted/50 text-muted-foreground hover:text-foreground transition-colors text-xs font-medium">
-                  <MessageCircle className="w-4 h-4" />
-                  WhatsApp
-                </a>
-              )}
-              {selected.socials.telegram && (
-                <a href={selected.socials.telegram} className="flex items-center gap-1.5 flex-1 justify-center py-2.5 rounded-xl bg-muted/50 text-muted-foreground hover:text-foreground transition-colors text-xs font-medium">
-                  <Send className="w-4 h-4" />
-                  Telegram
-                </a>
-              )}
-              {selected.socials.website && (
-                <a href={selected.socials.website} className="flex items-center gap-1.5 flex-1 justify-center py-2.5 rounded-xl bg-muted/50 text-muted-foreground hover:text-foreground transition-colors text-xs font-medium">
-                  <Globe className="w-4 h-4" />
-                  Web
-                </a>
-              )}
-            </div>
 
             <button
               onClick={() => { toggleConnect(selected.id); setSelected(null); }}

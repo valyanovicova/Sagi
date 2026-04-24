@@ -289,64 +289,88 @@ export function SagiLanding() {
       <div className="divider h-px" />
 
       {/* ══════════════════════════
-          APP PREVIEW
+          APP PREVIEW — 3 ROLES
       ══════════════════════════ */}
       <section className="py-24 px-6 bg-white overflow-hidden">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-20">
             <span className="badge-green inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold mb-4">
               <Smartphone size={11} />
-              Интерфейс приложения
+              Одно приложение — три роли
             </span>
-            <h2 className="text-4xl font-black text-[#111827] mb-4">Как это выглядит<br />в реальном использовании</h2>
+            <h2 className="text-4xl font-black text-[#111827] mb-4">Для каждого участника<br />экосистемы</h2>
             <p className="text-[#6B7280] text-lg max-w-xl mx-auto">
-              Три ключевых экрана: профиль резидента, лента сообщества и каталог офферов.
+              Сообщество, участники и партнёры работают в едином пространстве.
             </p>
           </div>
 
-          <div className="flex flex-col md:flex-row items-end justify-center gap-8 lg:gap-12">
-
+          <div className="grid md:grid-cols-3 gap-10 lg:gap-16">
             {[
-              { src: '/screen1.png', label: 'Профиль резидента', sub: 'Карта лояльности + QR-код', offset: 'md:mb-10' },
-              { src: '/screen2.png', label: 'Лента сообщества', sub: 'Офферы и мои сообщества', offset: '' },
-              { src: '/screen3.png', label: 'Каталог офферов', sub: 'Категории и партнёры AIFC', offset: 'md:mb-10' },
-            ].map(({ src, label, sub, offset }) => (
-              <div key={src} className={`flex flex-col items-center gap-5 ${offset}`}>
+              {
+                src: '/screen1.png',
+                role: 'Для сообщества',
+                roleColor: 'bg-[#EDFAF3] text-[#1E9E5A]',
+                label: 'Инструмент управления',
+                sub: 'Аналитика, участники, партнёрская сеть и контроль членства в одном дашборде.',
+                features: ['Верификация участников', 'Контроль сроков', 'Аналитика в реальном времени'],
+              },
+              {
+                src: '/screen2.png',
+                role: 'Для участника',
+                roleColor: 'bg-[#EEF2FF] text-[#4338CA]',
+                label: 'Привилегии и сообщество',
+                sub: 'Карта лояльности, каталог скидок, лента событий и безопасный нетворкинг.',
+                features: ['Apple Wallet карта', 'Каталог офферов', 'Verified Networking'],
+              },
+              {
+                src: '/screen3.png',
+                role: 'Для бизнеса',
+                roleColor: 'bg-[#FFF7ED] text-[#C2410C]',
+                label: 'Кабинет партнёра',
+                sub: 'Управление офферами, сканирование QR-карт и статистика визитов из сообщества.',
+                features: ['Сканирование карт', 'Управление офферами', 'Статистика клиентов'],
+              },
+            ].map(({ src, role, roleColor, label, sub, features }) => (
+              <div key={src} className="flex flex-col items-center gap-6">
+                {/* Role badge */}
+                <div className={`inline-flex items-center px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider ${roleColor}`}>
+                  {role}
+                </div>
+
                 {/* iPhone frame */}
                 <div className="relative" style={{ width: 220 }}>
-                  {/* outer shell */}
                   <div className="relative rounded-[3rem] overflow-hidden"
                     style={{
                       background: '#1A1A1A',
                       padding: '10px',
                       boxShadow: '0 0 0 1px #3a3a3a, 0 32px 64px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.08)',
                     }}>
-                    {/* inner screen */}
                     <div className="relative rounded-[2.3rem] overflow-hidden bg-black" style={{ aspectRatio: '9/19.5' }}>
-                      {/* dynamic island */}
                       <div className="absolute top-3 left-1/2 -translate-x-1/2 z-10 w-[72px] h-[22px] bg-black rounded-full" />
-                      {/* screenshot */}
-                      <img
-                        src={src}
-                        alt={label}
-                        className="w-full h-full object-cover object-top"
-                        draggable={false}
-                      />
+                      <img src={src} alt={label} className="w-full h-full object-cover object-top" draggable={false} />
                     </div>
                   </div>
-                  {/* side buttons */}
                   <div className="absolute left-[-3px] top-[88px] w-[3px] h-[34px] rounded-l-sm" style={{ background: '#2a2a2a' }} />
                   <div className="absolute left-[-3px] top-[132px] w-[3px] h-[34px] rounded-l-sm" style={{ background: '#2a2a2a' }} />
                   <div className="absolute left-[-3px] top-[176px] w-[3px] h-[34px] rounded-l-sm" style={{ background: '#2a2a2a' }} />
                   <div className="absolute right-[-3px] top-[120px] w-[3px] h-[56px] rounded-r-sm" style={{ background: '#2a2a2a' }} />
                 </div>
+
+                {/* Text */}
                 <div className="text-center">
-                  <div className="text-sm font-bold text-[#111827]">{label}</div>
-                  <div className="text-xs text-[#9CA3AF] mt-0.5">{sub}</div>
+                  <div className="text-base font-black text-[#111827] mb-2">{label}</div>
+                  <p className="text-sm text-[#6B7280] leading-relaxed mb-4 max-w-[220px] mx-auto">{sub}</p>
+                  <div className="space-y-1.5">
+                    {features.map(f => (
+                      <div key={f} className="flex items-center justify-center gap-2 text-sm text-[#374151]">
+                        <CheckCircle size={13} style={{ color: GREEN, flexShrink: 0 }} />
+                        {f}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             ))}
-
           </div>
         </div>
       </section>

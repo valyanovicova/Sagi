@@ -33,11 +33,14 @@ import { AdminOfferAnalyticsDetail } from './components/admin/AdminOfferAnalytic
 import { AdminCommunityBuilder } from './components/admin/AdminCommunityBuilder';
 import { BusinessCommunityPage } from './components/business/BusinessCommunityPage';
 import { NetworkPage } from './components/NetworkPage';
+import { HaniCommunity } from './components/HaniCommunity';
 import { SagiLanding } from './components/SagiLanding';
+import { AppStoreLanding } from './components/AppStoreLanding';
 
 export const router = createBrowserRouter([
   { path: '/', Component: RoleLanding },
   { path: '/landing', Component: SagiLanding },
+  { path: '/app', Component: AppStoreLanding },
   { path: '/auth', Component: AuthLanding },
   { path: '/auth/login', Component: Login },
   { path: '/auth/register', Component: Register },
@@ -56,6 +59,7 @@ export const router = createBrowserRouter([
       { path: 'profile/support', Component: SupportSettings },
       { path: 'join-community', Component: JoinCommunity },
       { path: 'network', Component: NetworkPage },
+      { path: 'community/hani', Component: HaniCommunity },
     ],
   },
   {
