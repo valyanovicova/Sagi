@@ -23,16 +23,10 @@ const OFFERS = [
 ];
 
 const BUSINESSES = [
-  { name: 'Hani Kitchen',   category: 'cake',     label: 'Торты' },
-  { name: 'Hani Café',      category: 'coffee',   label: 'Кофе' },
-  { name: 'Hani Desserts',  category: 'dessert',  label: 'Десерты' },
-  { name: 'Hani Express',   category: 'drinks',   label: 'Напитки' },
-  { name: 'Hani Central',   category: 'cake',     label: 'Торты' },
-  { name: 'Hani Bakery',    category: 'dessert',  label: 'Десерты' },
-  { name: 'Hani Brew',      category: 'coffee',   label: 'Кофе' },
-  { name: 'Hani Sweet',     category: 'cake',     label: 'Торты' },
-  { name: 'Hani Lounge',    category: 'drinks',   label: 'Напитки' },
-  { name: 'Hani Events',    category: 'catering', label: 'Кейтеринг' },
+  { name: 'Master Coffee', label: 'Кофейня',      photo: '/master-coffee.jpeg' },
+  { name: 'Tours',         label: 'Путешествия',  photo: '/tours.jpeg' },
+  { name: 'Burabay Trips', label: 'Туры в Бурабай', photo: '/burabay.jpeg' },
+  { name: 'Happy Cake',    label: 'Кондитерская', photo: '/happy-cake.jpeg' },
 ];
 
 const CROSS_BONUSES = [
@@ -56,7 +50,6 @@ export function HaniCommunity() {
   const [selectedCategory, setCategory] = useState('all');
   const [showBusinesses, setShowBusinesses] = useState(false);
   const [bizSearch, setBizSearch]           = useState('');
-  const [bizCategory, setBizCategory]       = useState('all');
 
   const filteredOffers = OFFERS.filter(o => {
     const matchCat    = selectedCategory === 'all' || o.category === selectedCategory;
@@ -65,8 +58,8 @@ export function HaniCommunity() {
   });
 
   const filteredBiz = BUSINESSES.filter(b =>
-    (bizCategory === 'all' || b.category === bizCategory) &&
-    b.name.toLowerCase().includes(bizSearch.toLowerCase())
+    b.name.toLowerCase().includes(bizSearch.toLowerCase()) ||
+    b.label.toLowerCase().includes(bizSearch.toLowerCase())
   );
 
   const tabStyle = (key: Tab) => tab === key ? { background: HANI_GRADIENT } : {};
@@ -95,21 +88,12 @@ export function HaniCommunity() {
             </div>
             <h1 className="text-white font-bold text-lg leading-tight">hani</h1>
             <p className="text-white/70 text-xs mt-0.5 font-medium">Сеть кондитерских-кофеен в Астане</p>
-            <p className="text-white/50 text-xs mt-1 flex items-center gap-1">
-              <Link
-                to="/user/network?community=hani"
-                className="hover:text-white transition-colors"
-              >
-                1 840 участников
-              </Link>
-              <span>·</span>
-              <button
-                onClick={() => setShowBusinesses(true)}
-                className="hover:text-white transition-colors"
-              >
-                10 партнёров
-              </button>
-            </p>
+            <button
+              onClick={() => setShowBusinesses(true)}
+              className="text-white/50 text-xs mt-1 hover:text-white transition-colors"
+            >
+              4 партнёра
+            </button>
           </div>
         </div>
       </div>
@@ -119,6 +103,9 @@ export function HaniCommunity() {
         <p className="text-xs text-muted-foreground leading-relaxed">
           Hani - сладкий путь к успеху. Сеть кондитерских в Астане, покорившая всех своими фирменными тортами и десертами.
         </p>
+        <a href="https://hanicc.kz" target="_blank" rel="noopener noreferrer" className="text-xs text-[#CC8F00] hover:underline font-medium mt-1 inline-block">
+          hanicc.kz
+        </a>
       </div>
 
       {/* ─── TABS ─── */}
@@ -280,7 +267,7 @@ export function HaniCommunity() {
         <div
           className="fixed inset-0 z-50 flex flex-col justify-end items-center"
           style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }}
-          onClick={() => { setShowBusinesses(false); setBizSearch(''); setBizCategory('all'); }}
+          onClick={() => { setShowBusinesses(false); setBizSearch(''); }}
         >
           <div
             className="w-full max-w-md bg-card rounded-t-3xl flex flex-col"
@@ -293,17 +280,17 @@ export function HaniCommunity() {
             <div className="flex items-center justify-between px-5 py-3 border-b border-border shrink-0">
               <div>
                 <h2 className="text-base font-semibold">Партнёры hani</h2>
-                <p className="text-xs text-muted-foreground">{BUSINESSES.length} заведений</p>
+                <p className="text-xs text-muted-foreground">{BUSINESSES.length} партнёров</p>
               </div>
               <button
-                onClick={() => { setShowBusinesses(false); setBizSearch(''); setBizCategory('all'); }}
+                onClick={() => { setShowBusinesses(false); setBizSearch(''); }}
                 className="w-8 h-8 rounded-full bg-input-background flex items-center justify-center"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
             <div className="px-4 pt-3 pb-2 shrink-0">
-              <div className="flex items-center gap-2 rounded-2xl px-3 py-2.5 bg-input-background mb-3">
+              <div className="flex items-center gap-2 rounded-2xl px-3 py-2.5 bg-input-background">
                 <Search className="w-4 h-4 text-muted-foreground shrink-0" />
                 <input
                   type="text"
@@ -318,25 +305,6 @@ export function HaniCommunity() {
                   </button>
                 )}
               </div>
-              <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-hide">
-                <button
-                  onClick={() => setBizCategory('all')}
-                  className={chipClass(bizCategory === 'all')}
-                  style={chipStyle(bizCategory === 'all')}
-                >
-                  Все
-                </button>
-                {CATEGORIES.map(cat => (
-                  <button
-                    key={cat.id}
-                    onClick={() => setBizCategory(cat.id)}
-                    className={chipClass(bizCategory === cat.id)}
-                    style={chipStyle(bizCategory === cat.id)}
-                  >
-                    {cat.name}
-                  </button>
-                ))}
-              </div>
             </div>
             <div className="overflow-y-auto flex-1 px-4 pb-8 pt-2 space-y-2">
               {filteredBiz.length === 0 && (
@@ -344,8 +312,8 @@ export function HaniCommunity() {
               )}
               {filteredBiz.map(b => (
                 <div key={b.name} className="flex items-center gap-3 bg-input-background rounded-2xl px-3 py-3">
-                  <div className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0">
-                    <img src="/hani.jpeg" alt="hani" className="w-full h-full object-cover" />
+                  <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 bg-muted">
+                    <img src={b.photo} alt={b.name} className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{b.name}</p>
