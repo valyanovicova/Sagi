@@ -30,12 +30,12 @@ const BUSINESSES = [
 ];
 
 const CROSS_BONUSES = [
-  { id: 1, name: 'Chez Georges',  category: 'Ресторан',    bonus: '3%', color: '#CC8F00', bg: '#FFF9E0', icon: '🍽' },
-  { id: 2, name: 'Rafe Beauty',   category: 'Спа',         bonus: '5%', color: '#E040FB', bg: '#FCE4EC', icon: '💆' },
-  { id: 3, name: 'Ana Flowers',   category: 'Ретейл',      bonus: '2%', color: '#FF6D00', bg: '#FFF3E0', icon: '💐' },
-  { id: 4, name: 'Master Coffee', category: 'Кофейня',     bonus: '4%', color: '#00BCD4', bg: '#E0F7FA', icon: '☕' },
-  { id: 5, name: 'Bronx Fitness', category: 'Фитнес',      bonus: '3%', color: '#43A047', bg: '#E8F5E9', icon: '💪' },
-  { id: 6, name: 'AIFC Academy',  category: 'Образование', bonus: '2%', color: '#F4511E', bg: '#FBE9E7', icon: '🎓' },
+  { id: 1, name: 'Chez Georges',  category: 'Ресторан',    bonus: '3%', color: '#CC8F00', photo: '/chez-georges.jpeg' },
+  { id: 2, name: 'Rafe Beauty',   category: 'Спа',         bonus: '5%', color: '#E040FB', photo: '/rafe-beauty.jpeg' },
+  { id: 3, name: 'Ana Flowers',   category: 'Ретейл',      bonus: '2%', color: '#FF6D00', photo: '/ana-flowers.jpeg' },
+  { id: 4, name: 'Master Coffee', category: 'Кофейня',     bonus: '4%', color: '#00BCD4', photo: '/master-coffee.jpeg' },
+  { id: 5, name: 'Bronx Fitness', category: 'Фитнес',      bonus: '3%', color: '#43A047', photo: '/bronx-fitness.jpeg' },
+  { id: 6, name: 'AIFC Academy',  category: 'Образование', bonus: '2%', color: '#F4511E', photo: '/aifc-academy.jpeg' },
 ];
 
 const TABS: { key: Tab; label: string; icon: typeof ShoppingBag }[] = [
@@ -246,12 +246,13 @@ export function HaniCommunity() {
               {CROSS_BONUSES.map(b => (
                 <div
                   key={b.id}
-                  className="rounded-2xl p-3 flex flex-col items-center gap-2 cursor-pointer border border-transparent hover:border-yellow-300 transition-all"
-                  style={{ background: b.bg }}
+                  className="rounded-2xl overflow-hidden flex flex-col cursor-pointer border border-transparent hover:border-yellow-300 transition-all bg-card"
                 >
-                  <div className="text-3xl leading-none">{b.icon}</div>
-                  <div className="text-center">
-                    <div className="text-xs font-bold text-foreground leading-tight">{b.name}</div>
+                  <div className="w-full aspect-square overflow-hidden">
+                    <img src={b.photo} alt={b.name} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="p-2 text-center">
+                    <div className="text-[11px] font-bold text-foreground leading-tight">{b.name}</div>
                     <div className="text-sm font-black mt-0.5" style={{ color: b.color }}>+{b.bonus}</div>
                   </div>
                 </div>
