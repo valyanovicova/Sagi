@@ -942,6 +942,12 @@ export function NetworkPage() {
                   <div>
                     <div className="font-semibold text-sm text-foreground leading-tight">{person.name}</div>
                     <div className="text-xs text-muted-foreground mt-0.5">{person.role}</div>
+                    {person.location && (
+                      <div className="flex items-center gap-1 text-[11px] text-muted-foreground mt-0.5">
+                        <MapPin className="w-3 h-3 shrink-0" />
+                        {person.location.split(',')[0]}
+                      </div>
+                    )}
                   </div>
                   <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
                 </div>
