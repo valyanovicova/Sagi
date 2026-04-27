@@ -723,7 +723,7 @@ function GraphView({ onSelectPerson, activeCommunity, onCommunityChange, activeC
         </div>
 
         {/* Community filter pills */}
-        <div className="flex gap-2 pointer-events-auto overflow-x-auto max-w-xs w-full pb-0.5">
+        <div className="flex gap-2 pointer-events-auto overflow-x-auto max-w-xs w-full pb-0.5 scrollbar-hide">
           <button
             onClick={() => onCommunityChange(null)}
             className="shrink-0 px-3 py-1 rounded-full text-[11px] font-semibold border transition-all"
@@ -750,7 +750,7 @@ function GraphView({ onSelectPerson, activeCommunity, onCommunityChange, activeC
         </div>
 
         {/* City filter pills */}
-        <div className="flex gap-2 pointer-events-auto overflow-x-auto max-w-xs w-full pb-0.5">
+        <div className="flex gap-2 pointer-events-auto overflow-x-auto max-w-xs w-full pb-0.5 scrollbar-hide">
           {[null, 'Almaty', 'Astana'].map(city => (
             <button
               key={city ?? 'all'}
