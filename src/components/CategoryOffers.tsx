@@ -53,53 +53,53 @@ export function CategoryOffers() {
   ];
 
   const offers: Offer[] = [
-    { id: 1, business: 'Master Coffee', offer: t('offer10OffBevFull'), category: 'food', type: 'cafe', exclusive: false },
-    { id: 2, business: 'Chez Georges', offer: t('offer10OffFood'), category: 'food', type: 'restaurant', exclusive: true },
-    { id: 3, business: 'One Cup', offer: t('offer20OffBar'), category: 'food', type: 'cafe', exclusive: false },
-    { id: 4, business: 'Luckee Yu', offer: t('offerGiftVouchers'), category: 'food', type: 'restaurant', exclusive: true },
-    { id: 5, business: 'Aula', offer: t('offer10OffFoodBar'), category: 'food', type: 'restaurant', exclusive: false },
-    { id: 6, business: 'Laliko', offer: t('offer10OffFoodBar'), category: 'food', type: 'restaurant', exclusive: false },
-    { id: 7, business: 'Kultura Diktuet', offer: t('offer10OffFoodDrinks'), category: 'food', type: 'restaurant', exclusive: false },
-    { id: 8, business: 'Peak Buro', offer: t('offer10OffFoodDrinks'), category: 'food', type: 'cafe', exclusive: false },
-    { id: 9, business: 'Lia Bistro', offer: t('offer10OffFoodDrinks'), category: 'food', type: 'restaurant', exclusive: false },
-    { id: 10, business: 'Bella Ciao', offer: t('offer10OffFoodDrinks'), category: 'food', type: 'restaurant', exclusive: false },
-    { id: 11, business: 'Wyndham Garden Astana', offer: t('offer15OffBestRate'), category: 'hotel', type: 'hotel', exclusive: true },
-    { id: 12, business: 'Wyndham Garden Burabay', offer: t('offer10OffBestRate'), category: 'hotel', type: 'hotel', exclusive: false },
-    { id: 13, business: 'Ramada by Wyndham Astana', offer: t('offer15OffBestRate'), category: 'hotel', type: 'hotel', exclusive: true },
-    { id: 14, business: 'Sheraton Astana', offer: t('offerCorporateRate'), category: 'hotel', type: 'hotel', exclusive: true },
-    { id: 15, business: 'Rixos Borovoe', offer: t('offerCorporateDiscount'), category: 'hotel', type: 'hotel', exclusive: false },
-    { id: 16, business: 'Rixos Almaty', offer: t('offerCorporateDiscount'), category: 'hotel', type: 'hotel', exclusive: false },
-    { id: 17, business: 'Beijing Palace', offer: t('offerCorporateDiscount'), category: 'hotel', type: 'hotel', exclusive: false },
-    { id: 18, business: "Tör're Astana", offer: t('offer15OffStay'), category: 'hotel', type: 'hotel', exclusive: false },
-    { id: 19, business: 'Hilton Astana', offer: t('offer10OffSpaRate'), category: 'hotel', type: 'hotel', exclusive: true },
-    { id: 20, business: 'Lotte Hotels Moscow', offer: t('offerCorporateDiscount'), category: 'hotel', type: 'hotel', exclusive: false },
-    { id: 21, business: 'Green Wellness Burabay', offer: t('offer10OffStay'), category: 'hotel', type: 'hotel', exclusive: false },
-    { id: 22, business: 'Rafe Beauty Lounge', offer: t('offer10OffServices'), category: 'beauty', type: 'spa', exclusive: false },
-    { id: 23, business: 'Anga Dental Clinic', offer: t('offer10to15OffDental'), category: 'beauty', type: 'healthcare', exclusive: false },
-    { id: 24, business: 'Tulip Medicine', offer: t('offerCorporateDiscount'), category: 'beauty', type: 'healthcare', exclusive: false },
-    { id: 25, business: 'Bronx Fitness', offer: t('offerCorporateDiscount'), category: 'fitness', type: 'fitness', exclusive: false },
-    { id: 26, business: 'Nomad Golf Studio', offer: t('offer20to30Off'), category: 'fitness', type: 'fitness', exclusive: false },
-    { id: 27, business: 'Invictus Go', offer: t('offerCorporateDiscount'), category: 'fitness', type: 'fitness', exclusive: false },
-    { id: 28, business: 'Interteach', offer: t('offerInsurancePackages'), category: 'healthcare', type: 'healthcare', exclusive: false },
-    { id: 29, business: 'International SOS', offer: t('offerCorporateDiscount'), category: 'healthcare', type: 'healthcare', exclusive: false },
-    { id: 30, business: 'AIFC Academy', offer: t('offer10OffTraining'), category: 'education', type: 'education', exclusive: true },
-    { id: 31, business: 'Coventry University Kazakhstan', offer: t('offerCorporateDiscount'), category: 'education', type: 'education', exclusive: false },
-    { id: 32, business: 'Ardingly Astana', offer: t('offerCorporateDiscount'), category: 'education', type: 'education', exclusive: false },
-    { id: 33, business: 'Nazarbayev University GSB', offer: t('offerCorporateDiscount'), category: 'education', type: 'education', exclusive: false },
-    { id: 34, business: 'Canadian International School', offer: t('offer10OffTuition'), category: 'education', type: 'education', exclusive: false },
-    { id: 35, business: 'Abadan Kindergarten', offer: t('offerDiscountEntrance'), category: 'education', type: 'education', exclusive: false },
-    { id: 36, business: 'Air Astana', offer: t('offerCorporateDiscount'), category: 'travel', type: 'travel', exclusive: true },
-    { id: 37, business: 'iTraveler.kz', offer: t('offerCorporateDiscount'), category: 'travel', type: 'travel', exclusive: false },
-    { id: 38, business: 'Empire Travel', offer: t('offerCorporateDiscount'), category: 'travel', type: 'travel', exclusive: false },
-    { id: 39, business: 'Intermark Relocation', offer: t('offer10OffRelocation'), category: 'travel', type: 'travel', exclusive: false },
-    { id: 40, business: 'Ana Flowers', offer: t('offer10Off'), category: 'retail', type: 'retail', exclusive: false },
-    { id: 41, business: 'Active Mobile Operator', offer: t('offerSpecialMobilePackage'), category: 'retail', type: 'retail', exclusive: false },
-    { id: 42, business: 'Antal Kazakhstan', offer: t('offerCorporateDiscount'), category: 'retail', type: 'retail', exclusive: false },
+    { id: 1, business: 'Brew Society', offer: t('offer10OffBevFull'), category: 'food', type: 'cafe', exclusive: false },
+    { id: 2, business: 'Le Bistro', offer: t('offer10OffFood'), category: 'food', type: 'restaurant', exclusive: true },
+    { id: 3, business: 'Daily Grind', offer: t('offer20OffBar'), category: 'food', type: 'cafe', exclusive: false },
+    { id: 4, business: 'Sakura Kitchen', offer: t('offerGiftVouchers'), category: 'food', type: 'restaurant', exclusive: true },
+    { id: 5, business: 'The Loft', offer: t('offer10OffFoodBar'), category: 'food', type: 'restaurant', exclusive: false },
+    { id: 6, business: 'Noma Grill', offer: t('offer10OffFoodBar'), category: 'food', type: 'restaurant', exclusive: false },
+    { id: 7, business: 'Atlas Bar', offer: t('offer10OffFoodDrinks'), category: 'food', type: 'restaurant', exclusive: false },
+    { id: 8, business: 'Rooftop Café', offer: t('offer10OffFoodDrinks'), category: 'food', type: 'cafe', exclusive: false },
+    { id: 9, business: 'Olivia Bistro', offer: t('offer10OffFoodDrinks'), category: 'food', type: 'restaurant', exclusive: false },
+    { id: 10, business: 'La Piazza', offer: t('offer10OffFoodDrinks'), category: 'food', type: 'restaurant', exclusive: false },
+    { id: 11, business: 'Grand Vega Hotel', offer: t('offer15OffBestRate'), category: 'hotel', type: 'hotel', exclusive: true },
+    { id: 12, business: 'Serene Lake Resort', offer: t('offer10OffBestRate'), category: 'hotel', type: 'hotel', exclusive: false },
+    { id: 13, business: 'Meridian Hotel', offer: t('offer15OffBestRate'), category: 'hotel', type: 'hotel', exclusive: true },
+    { id: 14, business: 'Pinnacle Suites', offer: t('offerCorporateRate'), category: 'hotel', type: 'hotel', exclusive: true },
+    { id: 15, business: 'Crystal Bay Resort', offer: t('offerCorporateDiscount'), category: 'hotel', type: 'hotel', exclusive: false },
+    { id: 16, business: 'Heritage House', offer: t('offerCorporateDiscount'), category: 'hotel', type: 'hotel', exclusive: false },
+    { id: 17, business: 'Pagoda Palace', offer: t('offerCorporateDiscount'), category: 'hotel', type: 'hotel', exclusive: false },
+    { id: 18, business: 'Birchwood Inn', offer: t('offer15OffStay'), category: 'hotel', type: 'hotel', exclusive: false },
+    { id: 19, business: 'Skyline Hotel', offer: t('offer10OffSpaRate'), category: 'hotel', type: 'hotel', exclusive: true },
+    { id: 20, business: 'Atlas Moscow', offer: t('offerCorporateDiscount'), category: 'hotel', type: 'hotel', exclusive: false },
+    { id: 21, business: 'Birch Wellness Resort', offer: t('offer10OffStay'), category: 'hotel', type: 'hotel', exclusive: false },
+    { id: 22, business: 'Aura Beauty', offer: t('offer10OffServices'), category: 'beauty', type: 'spa', exclusive: false },
+    { id: 23, business: 'SmileCare Clinic', offer: t('offer10to15OffDental'), category: 'beauty', type: 'healthcare', exclusive: false },
+    { id: 24, business: 'Lotus Medical', offer: t('offerCorporateDiscount'), category: 'beauty', type: 'healthcare', exclusive: false },
+    { id: 25, business: 'Iron Grid Gym', offer: t('offerCorporateDiscount'), category: 'fitness', type: 'fitness', exclusive: false },
+    { id: 26, business: 'Eagle Golf Studio', offer: t('offer20to30Off'), category: 'fitness', type: 'fitness', exclusive: false },
+    { id: 27, business: 'Kinetic Club', offer: t('offerCorporateDiscount'), category: 'fitness', type: 'fitness', exclusive: false },
+    { id: 28, business: 'EduShield', offer: t('offerInsurancePackages'), category: 'healthcare', type: 'healthcare', exclusive: false },
+    { id: 29, business: 'MedGlobal', offer: t('offerCorporateDiscount'), category: 'healthcare', type: 'healthcare', exclusive: false },
+    { id: 30, business: 'Vertex Academy', offer: t('offer10OffTraining'), category: 'education', type: 'education', exclusive: true },
+    { id: 31, business: 'Nova University', offer: t('offerCorporateDiscount'), category: 'education', type: 'education', exclusive: false },
+    { id: 32, business: 'Crest School', offer: t('offerCorporateDiscount'), category: 'education', type: 'education', exclusive: false },
+    { id: 33, business: 'Apex Business School', offer: t('offerCorporateDiscount'), category: 'education', type: 'education', exclusive: false },
+    { id: 34, business: 'International Academy', offer: t('offer10OffTuition'), category: 'education', type: 'education', exclusive: false },
+    { id: 35, business: 'Little Stars', offer: t('offerDiscountEntrance'), category: 'education', type: 'education', exclusive: false },
+    { id: 36, business: 'SkyLink Airways', offer: t('offerCorporateDiscount'), category: 'travel', type: 'travel', exclusive: true },
+    { id: 37, business: 'WanderKZ', offer: t('offerCorporateDiscount'), category: 'travel', type: 'travel', exclusive: false },
+    { id: 38, business: 'Horizon Travel', offer: t('offerCorporateDiscount'), category: 'travel', type: 'travel', exclusive: false },
+    { id: 39, business: 'MoveEasy Relocation', offer: t('offer10OffRelocation'), category: 'travel', type: 'travel', exclusive: false },
+    { id: 40, business: 'Flora Bloom', offer: t('offer10Off'), category: 'retail', type: 'retail', exclusive: false },
+    { id: 41, business: 'LinkMobile', offer: t('offerSpecialMobilePackage'), category: 'retail', type: 'retail', exclusive: false },
+    { id: 42, business: 'TalentBridge', offer: t('offerCorporateDiscount'), category: 'retail', type: 'retail', exclusive: false },
   ];
 
   const events = [
     {
-      id: 1, title: 'AIFC Morning Coffee', date: 'Thu, Apr 17 · 09:00', location: 'Master Coffee, AIFC Tower', type: 'cafe' as BizType,
+      id: 1, title: 'Vertex Morning Coffee', date: 'Thu, Apr 17 · 09:00', location: 'Brew Society, Vertex Tower', type: 'cafe' as BizType,
       friendsGoing: [
         { name: 'Kamila D.', initials: 'KD', color: '#f06ac8' },
         { name: 'Arman K.', initials: 'AK', color: '#6aaff0' },
@@ -107,14 +107,14 @@ export function CategoryOffers() {
       ],
     },
     {
-      id: 2, title: 'FinTech Seminar 2026', date: 'Fri, Apr 18 · 14:00', location: 'AIFC Academy, Room 3', type: 'education' as BizType,
+      id: 2, title: 'FinTech Seminar 2026', date: 'Fri, Apr 18 · 14:00', location: 'Vertex Academy, Room 3', type: 'education' as BizType,
       friendsGoing: [
         { name: 'Daniyar S.', initials: 'DS', color: '#f06a6a' },
         { name: 'Farida B.', initials: 'FB', color: '#f06a80' },
       ],
     },
     {
-      id: 3, title: 'Networking Business Lunch', date: 'Sat, Apr 19 · 12:30', location: 'Chez Georges', type: 'restaurant' as BizType,
+      id: 3, title: 'Networking Business Lunch', date: 'Sat, Apr 19 · 12:30', location: 'Le Bistro', type: 'restaurant' as BizType,
       friendsGoing: [
         { name: 'Madina I.', initials: 'MI', color: '#c86af0' },
         { name: 'Ruslan A.', initials: 'RA', color: '#6af0e0' },
@@ -123,34 +123,34 @@ export function CategoryOffers() {
       ],
     },
     {
-      id: 4, title: 'Wellness Morning', date: 'Sun, Apr 20 · 08:00', location: 'Rafe Beauty Lounge', type: 'spa' as BizType,
+      id: 4, title: 'Wellness Morning', date: 'Sun, Apr 20 · 08:00', location: 'Aura Beauty', type: 'spa' as BizType,
       friendsGoing: [],
     },
   ];
 
   const tasks = [
-    { id: 1, title: 'Attend 2 AIFC Events', reward: '+50 pts', done: false },
+    { id: 1, title: 'Attend 2 Vertex Club Events', reward: '+50 pts', done: false },
     { id: 2, title: 'Visit 3 Exclusive Partners', reward: '+30 pts', done: false },
     { id: 3, title: 'Complete your profile', reward: '+20 pts', done: true },
-    { id: 4, title: 'Use an offer at Hilton Astana', reward: '+40 pts', done: false },
+    { id: 4, title: 'Use an offer at Skyline Hotel', reward: '+40 pts', done: false },
   ];
 
   const vacancies = [
-    { id: 1, title: 'Financial Analyst', company: 'AIFC Authority', type: 'Full-time' },
-    { id: 2, title: 'Legal Counsel', company: 'AIFC Court', type: 'Full-time' },
-    { id: 3, title: 'Marketing Manager', company: 'Astana Hub', type: 'Contract' },
+    { id: 1, title: 'Financial Analyst', company: 'Vertex Authority', type: 'Full-time' },
+    { id: 2, title: 'Legal Counsel', company: 'Vertex Legal', type: 'Full-time' },
+    { id: 3, title: 'Marketing Manager', company: 'NexLab', type: 'Contract' },
     { id: 4, title: 'UX Designer', company: 'Fintech startup', type: 'Part-time' },
   ];
 
   const [newsPosts, setNewsPosts] = useState<NewsPost[]>([
     {
-      id: 1, author: 'AIFC HR', time: '2h ago',
+      id: 1, author: 'Vertex HR', time: '2h ago',
       text: 'New parking passes are available at reception. Please collect before Friday.',
       image: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80',
       attendees: [],
     },
     {
-      id: 2, author: 'AIFC Events', time: '5h ago',
+      id: 2, author: 'Vertex Events', time: '5h ago',
       text: 'The Q2 Networking Breakfast is confirmed for April 17th. RSVP via the Events tab.',
       image: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=600&q=80',
       attendees: [
@@ -161,7 +161,7 @@ export function CategoryOffers() {
       ],
     },
     {
-      id: 3, author: 'AIFC Security', time: '1d ago',
+      id: 3, author: 'Vertex Security', time: '1d ago',
       text: 'Reminder: tail-gating is prohibited. All guests must be registered at Gate A.',
       image: 'https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=600&q=80',
       attendees: [],
@@ -202,27 +202,11 @@ export function CategoryOffers() {
           <div className="flex flex-col items-center">
             <div className="w-16 h-16 rounded-2xl bg-white flex items-center justify-center mb-2 shadow-lg p-2">
               <svg viewBox="0 0 64 64" className="w-full h-full">
-                {/* Outer teal C-arc */}
-                <path
-                  d="M32 6 A26 26 0 1 0 32 58 A26 26 0 0 0 56 38"
-                  fill="none"
-                  stroke="#008080"
-                  strokeWidth="7"
-                  strokeLinecap="round"
-                />
-                {/* Inner teal C-arc */}
-                <path
-                  d="M32 16 A16 16 0 1 0 32 48 A16 16 0 0 0 46 40"
-                  fill="none"
-                  stroke="#008080"
-                  strokeWidth="5"
-                  strokeLinecap="round"
-                />
-                {/* Center dot */}
-                <circle cx="32" cy="32" r="4.5" fill="#111" />
+                <polygon points="32,4 56,18 56,46 32,60 8,46 8,18" fill="none" stroke="#00695C" strokeWidth="3.5"/>
+                <polyline points="18,22 32,44 46,22" fill="none" stroke="#00695C" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <h1 className="text-white font-bold text-lg leading-tight">AIFC</h1>
+            <h1 className="text-white font-bold text-lg leading-tight">Vertex Club</h1>
             <p className="text-white/60 text-xs mt-0.5 flex items-center justify-center gap-1">
               <Link to="/user/network" className="hover:text-white transition-colors underline-offset-2 hover:underline">570 {t('members')}</Link>
               <span>·</span>
@@ -234,7 +218,7 @@ export function CategoryOffers() {
 
       {/* Description */}
       <div className="max-w-md mx-auto px-4 py-3">
-        <p className="text-xs text-muted-foreground leading-relaxed">{t('aifcDescription')}</p>
+        <p className="text-xs text-muted-foreground leading-relaxed">Vertex Club — бизнес-клуб в сердце финансового квартала. Открыт для резидентов, инвесторов и экспертов.</p>
       </div>
 
       {/* Tab switcher — 2-column grid */}
