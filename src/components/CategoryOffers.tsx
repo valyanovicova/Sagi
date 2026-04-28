@@ -23,6 +23,7 @@ interface Offer {
   category: string;
   type: BizType;
   exclusive: boolean;
+  photo?: string;
 }
 
 export function CategoryOffers() {
@@ -53,12 +54,12 @@ export function CategoryOffers() {
   ];
 
   const offers: Offer[] = [
-    { id: 1, business: 'Brew Society', offer: t('offer10OffBevFull'), category: 'food', type: 'cafe', exclusive: false },
-    { id: 2, business: 'Le Bistro', offer: t('offer10OffFood'), category: 'food', type: 'restaurant', exclusive: true },
-    { id: 3, business: 'Daily Grind', offer: t('offer20OffBar'), category: 'food', type: 'cafe', exclusive: false },
-    { id: 4, business: 'Sakura Kitchen', offer: t('offerGiftVouchers'), category: 'food', type: 'restaurant', exclusive: true },
-    { id: 5, business: 'The Loft', offer: t('offer10OffFoodBar'), category: 'food', type: 'restaurant', exclusive: false },
-    { id: 6, business: 'Noma Grill', offer: t('offer10OffFoodBar'), category: 'food', type: 'restaurant', exclusive: false },
+    { id: 1, business: 'Brew Society', offer: t('offer10OffBevFull'), category: 'food', type: 'cafe', exclusive: false, photo: '/brew-society.jpeg' },
+    { id: 2, business: 'Le Bistro', offer: t('offer10OffFood'), category: 'food', type: 'restaurant', exclusive: true, photo: '/le-bistro.jpeg' },
+    { id: 3, business: 'Daily Grind', offer: t('offer20OffBar'), category: 'food', type: 'cafe', exclusive: false, photo: '/daily-grind.jpeg' },
+    { id: 4, business: 'Sakura Kitchen', offer: t('offerGiftVouchers'), category: 'food', type: 'restaurant', exclusive: true, photo: '/sakura-kitchen.jpeg' },
+    { id: 5, business: 'The Loft', offer: t('offer10OffFoodBar'), category: 'food', type: 'restaurant', exclusive: false, photo: '/the-loft.jpeg' },
+    { id: 6, business: 'Noma Grill', offer: t('offer10OffFoodBar'), category: 'food', type: 'restaurant', exclusive: false, photo: '/noma-grill.jpeg' },
     { id: 7, business: 'Atlas Bar', offer: t('offer10OffFoodDrinks'), category: 'food', type: 'restaurant', exclusive: false },
     { id: 8, business: 'Rooftop Café', offer: t('offer10OffFoodDrinks'), category: 'food', type: 'cafe', exclusive: false },
     { id: 9, business: 'Olivia Bistro', offer: t('offer10OffFoodDrinks'), category: 'food', type: 'restaurant', exclusive: false },
@@ -346,13 +347,19 @@ export function CategoryOffers() {
             })()}
             <div className="grid grid-cols-2 gap-3">
               {filteredOffers.map((offer) => (
-                <Link key={offer.id} to={`/user/offer/${offer.id}`} className="flex flex-col bg-card border border-border rounded-2xl p-3 hover:border-[#10b981] transition-colors">
-                  <div className="flex items-start justify-between mb-2">
-                    <BusinessLogo name={offer.business} type={offer.type} size="md" />
+                <Link key={offer.id} to={`/user/offer/${offer.id}`} className="flex flex-col bg-card border border-border rounded-2xl overflow-hidden hover:border-[#10b981] transition-colors">
+                  {offer.photo ? (
+                    <img src={offer.photo} alt={offer.business} className="w-full h-24 object-cover" />
+                  ) : (
+                    <div className="p-3 pb-0">
+                      <BusinessLogo name={offer.business} type={offer.type} size="md" />
+                    </div>
+                  )}
+                  <div className="p-3 pt-2 flex flex-col flex-1">
+                    <h3 className="text-xs font-semibold leading-tight mb-1 line-clamp-1">{offer.business}</h3>
+                    <p className="text-xs text-muted-foreground mb-2 line-clamp-2 flex-1">{offer.offer}</p>
+                    <span className="inline-flex items-center text-[10px] px-2 py-0.5 bg-[#10b981]/10 text-[#10b981] rounded-full self-start">{t('active')}</span>
                   </div>
-                  <h3 className="text-xs font-semibold leading-tight mb-1 line-clamp-1">{offer.business}</h3>
-                  <p className="text-xs text-muted-foreground mb-2 line-clamp-2 flex-1">{offer.offer}</p>
-                  <span className="inline-flex items-center text-[10px] px-2 py-0.5 bg-[#10b981]/10 text-[#10b981] rounded-full self-start">{t('active')}</span>
                 </Link>
               ))}
             </div>
