@@ -76,7 +76,7 @@ export function Profile() {
 
         {/* Bio & Tags & Socials */}
         <div className="mb-5 space-y-3">
-          <p className="text-sm text-muted-foreground leading-relaxed">Fintech enthusiast and AIFC resident. Open to collaboration and investment opportunities.</p>
+          <p className="text-sm text-muted-foreground leading-relaxed">Fintech enthusiast and Vertex Club member. Open to collaboration and investment opportunities.</p>
           <div className="flex flex-wrap gap-2">
             {['Investor', 'Fintech'].map((tag) => (
               <span key={tag} className="px-3 py-1 bg-[#10b981]/10 text-[#10b981] rounded-full text-xs font-medium">
