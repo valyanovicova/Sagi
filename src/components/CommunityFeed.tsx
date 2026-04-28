@@ -20,32 +20,32 @@ export function CommunityFeed() {
 
   const featuredOffers = [
     {
-      id: 11, title: t('offer15OffStay'), business: 'Wyndham Garden Astana', type: 'hotel' as const,
+      id: 11, title: t('offer15OffStay'), business: 'Grand Vega Hotel', type: 'hotel' as const,
       gradient: 'linear-gradient(135deg, #0f2d4a 0%, #1a5276 50%, #0a1f33 100%)',
       tag: 'Hotel',
     },
     {
-      id: 2, title: t('offer10OffBev'), business: 'Master Coffee', type: 'cafe' as const,
+      id: 2, title: t('offer10OffBev'), business: 'Brew Society', type: 'cafe' as const,
       gradient: 'linear-gradient(135deg, #2d1a06 0%, #7c4a1e 50%, #1a0d03 100%)',
       tag: 'Café',
     },
     {
-      id: 22, title: t('offer10OffServices'), business: 'Rafe Beauty Lounge', type: 'spa' as const,
+      id: 22, title: t('offer10OffServices'), business: 'Aura Beauty', type: 'spa' as const,
       gradient: 'linear-gradient(135deg, #2d0f2d 0%, #6b2fa0 50%, #1a0a1a 100%)',
       tag: 'Beauty',
     },
     {
-      id: 36, title: t('offerCorporateDiscount'), business: 'Air Astana', type: 'travel' as const,
+      id: 36, title: t('offerCorporateDiscount'), business: 'SkyLink Airways', type: 'travel' as const,
       gradient: 'linear-gradient(135deg, #0a1f2d 0%, #0e5a8a 50%, #071420 100%)',
       tag: 'Travel',
     },
   ];
 
   const communities = [
-    { id: 1, name: t('aifcName'), type: 'office' as const, members: 570, businesses: 42, description: t('aifcDescription'), instagram: 'https://instagram.com/aifc.kz', facebook: 'https://facebook.com/aifc.kz', telegram: 'https://t.me/aifc_official', website: 'https://aifc.kz' },
-    { id: 'hani', name: 'hani', type: 'retail' as const, members: 1840, businesses: 64, description: 'Бонусная экосистема hani — кэшбэк и офферы от партнёров.' },
-    { id: 2, name: 'Astana Hub', type: 'tech' as const, members: 320, businesses: 18, description: 'Tech and startup community in Astana.', telegram: 'https://t.me/astana_hub' },
-    { id: 3, name: 'EXPO', type: 'district' as const, members: 210, businesses: 27, description: 'EXPO 2017 legacy business community.' },
+    { id: 1, name: 'Vertex Club', type: 'office' as const, members: 570, businesses: 42, description: 'Бизнес-клуб в сердце финансового квартала.', website: 'https://vertexclub.kz' },
+    { id: 'hani', name: 'bloom', type: 'retail' as const, members: 1840, businesses: 64, description: 'Бонусная экосистема bloom — кэшбэк и офферы от партнёров.' },
+    { id: 2, name: 'NexLab', type: 'tech' as const, members: 320, businesses: 18, description: 'Технологическое сообщество стартапов и инноваций.' },
+    { id: 3, name: 'Vega Forum', type: 'district' as const, members: 210, businesses: 27, description: 'Деловое сообщество выставочного района.' },
   ];
 
   return (
@@ -106,36 +106,42 @@ export function CommunityFeed() {
               <div key={community.id} className="bg-card border border-border rounded-2xl p-4 hover:border-[#10b981] transition-colors">
                 <div className="flex items-center gap-3">
                   {community.id === 1 ? (
-                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedCommunity(community); }} className="w-10 h-10 rounded-xl bg-white flex items-center justify-center flex-shrink-0 p-1.5 shadow-sm border border-border">
+                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedCommunity(community); }} className="w-10 h-10 rounded-xl bg-white flex items-center justify-center flex-shrink-0 p-1 shadow-sm border border-border overflow-hidden">
+                      {/* Vertex Club — hexagon + V mark */}
                       <svg viewBox="0 0 64 64" className="w-full h-full">
-                        <path d="M32 6 A26 26 0 1 0 32 58 A26 26 0 0 0 56 38" fill="none" stroke="#008080" strokeWidth="7" strokeLinecap="round" />
-                        <path d="M32 16 A16 16 0 1 0 32 48 A16 16 0 0 0 46 40" fill="none" stroke="#008080" strokeWidth="5" strokeLinecap="round" />
-                        <circle cx="32" cy="32" r="4.5" fill="#111" />
+                        <polygon points="32,4 56,18 56,46 32,60 8,46 8,18" fill="none" stroke="#00695C" strokeWidth="3.5"/>
+                        <polyline points="18,22 32,44 46,22" fill="none" stroke="#00695C" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </button>
                   ) : community.id === 'hani' ? (
-                    <Link to="/user/community/hani" onClick={e => e.stopPropagation()} className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 shadow-sm border border-border">
-                      <img src="/hani.jpeg" alt="hani" className="w-full h-full object-cover" />
-                    </Link>
-                  ) : community.id === 2 ? (
-                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedCommunity(community); }} className="w-10 h-10 rounded-xl bg-white flex items-center justify-center flex-shrink-0 p-1 shadow-sm border border-border">
-                      {/* Astana Hub — concentric rings */}
+                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedCommunity(community); }} className="w-10 h-10 rounded-xl bg-white flex items-center justify-center flex-shrink-0 p-1 shadow-sm border border-border overflow-hidden">
+                      {/* bloom — four-petal flower */}
                       <svg viewBox="0 0 64 64" className="w-full h-full">
-                        <circle cx="32" cy="32" r="28" fill="none" stroke="#111" strokeWidth="2.5" />
-                        <circle cx="32" cy="32" r="21" fill="none" stroke="#111" strokeWidth="2.5" />
-                        <circle cx="32" cy="32" r="14" fill="none" stroke="#111" strokeWidth="2.5" />
-                        <circle cx="32" cy="32" r="7"  fill="none" stroke="#111" strokeWidth="2.5" />
-                        <circle cx="32" cy="32" r="2"  fill="#111" />
+                        <circle cx="32" cy="20" r="10" fill="#F06292" opacity="0.85"/>
+                        <circle cx="44" cy="32" r="10" fill="#F06292" opacity="0.85"/>
+                        <circle cx="32" cy="44" r="10" fill="#F06292" opacity="0.85"/>
+                        <circle cx="20" cy="32" r="10" fill="#F06292" opacity="0.85"/>
+                        <circle cx="32" cy="32" r="7"  fill="#E91E63"/>
+                      </svg>
+                    </button>
+                  ) : community.id === 2 ? (
+                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedCommunity(community); }} className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm overflow-hidden" style={{background:'#0F172A'}}>
+                      {/* NexLab — hexagon grid + N lettermark */}
+                      <svg viewBox="0 0 64 64" className="w-full h-full">
+                        <rect width="64" height="64" fill="#0F172A"/>
+                        <polygon points="32,5 56,18.5 56,45.5 32,59 8,45.5 8,18.5" fill="none" stroke="#3B82F6" strokeWidth="2" opacity="0.5"/>
+                        <line x1="20" y1="18" x2="20" y2="46" stroke="#3B82F6" strokeWidth="3.5" strokeLinecap="round"/>
+                        <line x1="44" y1="18" x2="44" y2="46" stroke="#3B82F6" strokeWidth="3.5" strokeLinecap="round"/>
+                        <line x1="20" y1="18" x2="44" y2="46" stroke="#3B82F6" strokeWidth="3.5" strokeLinecap="round"/>
                       </svg>
                     </button>
                   ) : community.id === 3 ? (
-                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedCommunity(community); }} className="w-10 h-10 rounded-xl bg-[#111] flex items-center justify-center flex-shrink-0 shadow-sm overflow-hidden">
-                      {/* EXPO — dark tile with text */}
+                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedCommunity(community); }} className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm overflow-hidden" style={{background:'#0D1B2A'}}>
+                      {/* Vega Forum — 4-pointed star */}
                       <svg viewBox="0 0 64 64" className="w-full h-full">
-                        <rect width="64" height="64" fill="#111" />
-                        <circle cx="32" cy="20" r="10" fill="none" stroke="white" strokeWidth="1.5" opacity="0.4" />
-                        <circle cx="32" cy="20" r="5"  fill="none" stroke="white" strokeWidth="1.5" opacity="0.4" />
-                        <text x="32" y="38" textAnchor="middle" fill="white" fontSize="9" fontFamily="sans-serif" fontWeight="bold" letterSpacing="2">EXPO</text>
+                        <rect width="64" height="64" fill="#0D1B2A"/>
+                        <polygon points="32,7 36.5,27.5 57,32 36.5,36.5 32,57 27.5,36.5 7,32 27.5,27.5" fill="white" opacity="0.92"/>
+                        <circle cx="32" cy="32" r="5" fill="#60A5FA"/>
                       </svg>
                     </button>
                   ) : (
@@ -161,7 +167,7 @@ export function CommunityFeed() {
                       </Link>
                     </p>
                   </div>
-                  <Link to={community.id === 'hani' ? '/user/community/hani' : `/user/community/${community.id}`}>
+                  <Link to={`/user/community/${community.id}`}>
                     <ChevronRight className="w-5 h-5 text-muted-foreground hover:text-[#10b981] transition-colors" />
                   </Link>
                 </div>
