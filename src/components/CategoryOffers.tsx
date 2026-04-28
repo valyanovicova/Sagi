@@ -219,6 +219,7 @@ export function CategoryOffers() {
       {/* Description */}
       <div className="max-w-md mx-auto px-4 py-3">
         <p className="text-xs text-muted-foreground leading-relaxed">Vertex Club — бизнес-клуб в сердце финансового квартала. Открыт для резидентов, инвесторов и экспертов.</p>
+        <a href="https://vertexclub.kz" target="_blank" rel="noopener noreferrer" className="text-xs text-[#10b981] mt-1 block hover:underline">vertexclub.kz</a>
       </div>
 
       {/* Tab switcher — 2-column grid */}
